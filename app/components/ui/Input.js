@@ -5,7 +5,7 @@ export default function Input ({type = 'text', placeholder, value, onChange}){
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className=""
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm outline-none"
         />
     )
 }
