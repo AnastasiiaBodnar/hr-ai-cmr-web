@@ -5,7 +5,8 @@ export default function LoginPage() {
   return (
     <div>
     <Input placeholder = "Email address"/>
-    <Button text="Log In" variant="primary" />
-    </div>
+    <Button text="Log In" variant="primary"/>
+    <Button text="Log In with Google" variant="outline" />
+    </div> 
   )
 }
