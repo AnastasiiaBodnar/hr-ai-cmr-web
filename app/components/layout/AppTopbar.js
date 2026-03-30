@@ -7,7 +7,7 @@ export default function AppTopbar() {
                 <span className="mr-3 text-sm text-black/40">⌕</span>
                 <input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search..."
                     className="w-full bg-transparent text-[14px] text-black outline-none placeholder:text-black/35"
                 />
             </div>
@@ -27,7 +27,12 @@ export default function AppTopbar() {
                     />
                     <div className="flex items-center gap-2">
                         <span className="text-[14px] font-medium text-black">HR Manager</span>
-                        <span className="text-[12px] text-black/55">⌄</span>
+                        <Image
+                            src="/icons/arrow.png"
+                            alt="Open profile menu"
+                            width={10}
+                            height={10}
+                        />
                     </div>
                 </div>
             </div>

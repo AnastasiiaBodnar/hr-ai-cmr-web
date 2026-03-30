@@ -23,14 +23,24 @@ export default function CandidatesBoard({
                 <div className="flex items-center gap-2">
                     <span className="text-[16px] font-normal text-black">Filter by</span>
 
-                    <button className="flex h-[30px] items-center rounded-[4px] border border-black/15 bg-white px-3 text-[13px] text-black/50">
-                        Position
-                        <span className="ml-1 text-[10px]">⌄</span>
+                    <button className="flex h-[30px] items-center gap-1 rounded-[4px] border border-black/15 bg-white px-3 text-[13px] text-black/50">
+                        <span>Position</span>
+                        <Image
+                            src="/icons/arrow.png"
+                            alt="Open position filter"
+                            width={10}
+                            height={10}
+                        />
                     </button>
 
-                    <button className="flex h-[30px] items-center rounded-[4px] border border-black/15 bg-white px-3 text-[13px] text-black/50">
-                        Status
-                        <span className="ml-1 text-[10px]">⌄</span>
+                    <button className="flex h-[30px] items-center gap-1 rounded-[4px] border border-black/15 bg-white px-3 text-[13px] text-black/50">
+                        <span>Status</span>
+                        <Image
+                            src="/icons/arrow.png"
+                            alt="Open status filter"
+                            width={10}
+                            height={10}
+                        />
                     </button>
                 </div>
 
