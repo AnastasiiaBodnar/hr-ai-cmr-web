@@ -8,7 +8,7 @@ import CandidateInsightPanel from "@/app/components/recruitment/CandidateInsight
 import { mockCandidates } from "@/lib/mocks/candidates";
 
 export default function CandidatesPage() {
-    const [selectedCandidateId, setSelectedCandidateId] = useState(mockCandidates[0]?.id);
+    const [selectedCandidateId, setSelectedCandidateId] = useState("2");
 
     const selectedCandidate = useMemo(() => {
         return (
