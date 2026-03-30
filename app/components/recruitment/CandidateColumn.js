@@ -9,9 +9,9 @@ export default function CandidateColumn({
                                             onSelectCandidate,
                                         }) {
     return (
-        <section className="w-[186px] shrink-0 rounded-[12px] bg-[#F1F1F1] p-[4px]">
+        <section className="flex h-[176px] w-[200px] shrink-0 flex-col rounded-[10px] bg-white p-[5px]">
             <div
-                className={`mb-[6px] flex h-[32px] items-center justify-between rounded-[9px] px-[12px] text-[12px] font-normal ${headerClassName}`}
+                className={`mb-[6px] flex h-[37px] w-[190px] shrink-0 items-center justify-between rounded-[9px] px-[12px] text-[12px] font-normal ${headerClassName}`}
             >
                 <div className="flex items-center gap-2">
                     <span className="text-[11px]">◉</span>
@@ -20,18 +20,20 @@ export default function CandidateColumn({
                 <span>({count})</span>
             </div>
 
-            <div className="flex min-h-[150px] flex-col gap-[6px]">
+            <div className="flex-1 overflow-y-auto">
                 {candidates.length ? (
-                    candidates.map((candidate) => (
-                        <CandidateCard
-                            key={candidate.id}
-                            candidate={candidate}
-                            isSelected={candidate.id === selectedCandidateId}
-                            onSelect={onSelectCandidate}
-                        />
-                    ))
+                    <div className="flex flex-col items-center gap-[6px] pr-[2px]">
+                        {candidates.map((candidate) => (
+                            <CandidateCard
+                                key={candidate.id}
+                                candidate={candidate}
+                                isSelected={candidate.id === selectedCandidateId}
+                                onSelect={onSelectCandidate}
+                            />
+                        ))}
+                    </div>
                 ) : (
-                    <div className="flex min-h-[126px] items-center justify-center rounded-[10px] bg-[#F8F8F8] text-[14px] text-black/25">
+                    <div className="flex h-full items-center justify-center rounded-[8px] bg-white text-[14px] text-black/25">
                         empty
                     </div>
                 )}
