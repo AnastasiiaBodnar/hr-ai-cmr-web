@@ -2,13 +2,19 @@
 
 @theme inline {
   --color-primary: #002293;
-  --color-secondary: #7C3AED;
-  --color-background: #F8FAFC;
-  --color-surface: #FFFFFF;
-  --color-accent: #0B8B95;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-error: #E11D48;
+  --color-secondary: #7c3aed;
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-accent: #0b8b95;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #e11d48;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
