@@ -7,37 +7,43 @@ export default function CandidatesBoard({
                                             onSelectCandidate,
                                         }) {
     return (
-        <main className="flex-1 bg-background px-6 py-7">
-            <div className="mb-8 flex items-end gap-4">
+        <main className="flex-1 bg-background px-5 py-5">
+            <div className="mb-4 flex items-end gap-4 px-3 pt-2">
                 <h1 className="text-[32px] font-bold leading-none text-black">
                     AI CRM Candidates
                 </h1>
-                <span className="text-[32px] leading-none text-black">|</span>
-                <h2 className="text-2xl font-semibold leading-none text-black">
+                <span className="text-[30px] leading-none text-black">|</span>
+                <h2 className="text-[24px] font-semibold leading-none text-black">
                     Recruitment panel
                 </h2>
             </div>
 
-            <div className="mb-6 flex items-center justify-between rounded-[20px] border border-black/10 bg-white px-5 py-4">
-                <div className="flex items-center gap-4">
-                    <span className="text-base font-medium text-black">Filter by</span>
+            <div className="mb-4 flex items-center justify-between px-3">
+                <div className="flex items-center gap-3">
+                    <span className="text-[16px] font-normal text-black">Filter by</span>
 
-                    <button className="rounded-full border border-black/10 px-4 py-2 text-sm text-black/70">
+                    <button className="flex h-[30px] items-center rounded-md border border-black/15 bg-white px-3 text-[13px] text-black/50">
                         Position
+                        <span className="ml-1 text-[10px]">⌄</span>
                     </button>
 
-                    <button className="rounded-full border border-black/10 px-4 py-2 text-sm text-black/70">
+                    <button className="flex h-[30px] items-center rounded-md border border-black/15 bg-white px-3 text-[13px] text-black/50">
                         Status
+                        <span className="ml-1 text-[10px]">⌄</span>
                     </button>
                 </div>
 
-                <button className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white">
-                    Add candidates
-                </button>
+                <div className="flex items-center gap-3">
+                    <button className="h-[28px] rounded-[4px] bg-primary px-4 text-[13px] font-normal text-white">
+                        Add candidates +
+                    </button>
+                    <span className="text-[15px] text-primary">☰</span>
+                    <span className="text-[15px] text-primary">⊞</span>
+                </div>
             </div>
 
             <div className="overflow-x-auto">
-                <div className="flex min-w-max gap-4">
+                <div className="flex min-w-max gap-3 rounded-[18px] bg-white/50 p-2">
                     {CANDIDATE_STATUSES.map((status) => {
                         const items = candidates.filter(
                             (candidate) => candidate.status === status.key
@@ -48,6 +54,7 @@ export default function CandidatesBoard({
                                 key={status.key}
                                 title={status.label}
                                 count={items.length}
+                                headerClassName={status.headerClassName}
                                 candidates={items}
                                 selectedCandidateId={selectedCandidateId}
                                 onSelectCandidate={onSelectCandidate}

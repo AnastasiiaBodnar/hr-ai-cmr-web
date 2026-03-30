@@ -3,20 +3,24 @@ import CandidateCard from "./CandidateCard";
 export default function CandidateColumn({
                                             title,
                                             count,
+                                            headerClassName,
                                             candidates,
                                             selectedCandidateId,
                                             onSelectCandidate,
                                         }) {
     return (
-        <section className="w-[230px] shrink-0 rounded-[24px] bg-white p-3">
-            <div className="mb-4 flex items-center justify-between px-1">
-                <h3 className="text-base font-semibold text-black">{title}</h3>
-                <span className="rounded-full bg-black/5 px-2.5 py-1 text-xs font-medium text-black/70">
-          {count}
-        </span>
+        <section className="w-[185px] shrink-0 rounded-[14px] bg-[#F1F1F1] p-[4px]">
+            <div
+                className={`mb-2 flex h-[32px] items-center justify-between rounded-[10px] px-4 text-[12px] font-normal ${headerClassName}`}
+            >
+                <div className="flex items-center gap-2">
+                    <span className="text-[12px]">◉</span>
+                    <span>{title}</span>
+                </div>
+                <span>({count})</span>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex min-h-[155px] flex-col gap-2">
                 {candidates.length ? (
                     candidates.map((candidate) => (
                         <CandidateCard
@@ -27,8 +31,8 @@ export default function CandidateColumn({
                         />
                     ))
                 ) : (
-                    <div className="rounded-[20px] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-black/40">
-                        No candidates
+                    <div className="flex min-h-[128px] items-center justify-center rounded-[10px] bg-[#F8F8F8] text-[14px] text-black/25">
+                        empty
                     </div>
                 )}
             </div>

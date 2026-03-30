@@ -5,39 +5,46 @@ export default function CandidateCard({ candidate, isSelected, onSelect }) {
         <button
             type="button"
             onClick={() => onSelect(candidate.id)}
-            className={`w-full rounded-[20px] border bg-white p-4 text-left transition ${
+            className={`w-full rounded-[10px] border bg-white px-3 py-3 text-left shadow-sm transition ${
                 isSelected
-                    ? "border-secondary shadow-sm"
-                    : "border-black/10 hover:border-black/20"
+                    ? "border-[#86E6BE] shadow-[0_2px_8px_rgba(16,185,129,0.15)]"
+                    : "border-black/10"
             }`}
         >
-            <div className="mb-3 flex items-center gap-3">
+            <div className="mb-2 flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                    <p className="truncate text-[14px] font-semibold leading-tight text-black">
+                        {candidate.fullName}
+                    </p>
+                    <p className="truncate text-[12px] leading-tight text-black/80">
+                        {candidate.position}
+                    </p>
+                </div>
+
                 <Image
                     src={candidate.avatar}
                     alt={candidate.fullName}
-                    width={40}
-                    height={40}
+                    width={22}
+                    height={22}
                     className="rounded-full object-cover"
                 />
-
-                <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-black">
-                        {candidate.fullName}
-                    </p>
-                    <p className="truncate text-xs text-black/60">{candidate.email}</p>
-                </div>
             </div>
 
-            <div className="space-y-2">
-                <div>
-                    <p className="text-xs text-black/50">Position</p>
-                    <p className="text-sm font-medium text-black">{candidate.position}</p>
+            <div className="mt-4 flex items-end justify-between gap-2">
+                <div className="min-h-[28px]">
+                    {candidate.level ? (
+                        <>
+                            <p className="text-[11px] font-semibold leading-tight text-black">
+                                {candidate.level}
+                            </p>
+                            <p className="text-[11px] font-semibold leading-tight text-black">
+                                from 800$
+                            </p>
+                        </>
+                    ) : null}
                 </div>
 
-                <div>
-                    <p className="text-xs text-black/50">Added</p>
-                    <p className="text-sm text-black/80">{candidate.createdAt}</p>
-                </div>
+                <p className="caption-text text-[11px] text-black/30">{candidate.createdAt}</p>
             </div>
         </button>
     );
