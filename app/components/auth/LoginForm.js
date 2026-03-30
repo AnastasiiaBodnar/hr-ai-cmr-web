@@ -10,8 +10,14 @@ export default function LoginForm() {
     <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-6 lg:p-8 w-full">
       {/* Header Tabs */}
       <div className="flex items-center justify-between mb-6">
-        <div className="w-12 h-10 relative bg-[#0B62FA] rounded flex items-center justify-center shrink-0">
-          <span className="text-white font-bold text-xl leading-none">HR</span>
+        <div className="relative w-12 h-10 shrink-0">
+          <Image 
+            src="/images/logo.png" 
+            alt="HR Logo" 
+            fill
+            sizes="48px"
+            className="object-contain"
+          />
         </div>
         
         <div className="flex items-center space-x-6 text-sm font-medium">
