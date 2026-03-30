@@ -1,12 +1,10 @@
-import Input from "@/app/components/ui/Input"
-import Button from "@/app/components/ui/Button"
+import AuthLayout from "@/app/components/auth/AuthLayout";
+import LoginForm from "@/app/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div>
-    <Input placeholder = "Email address"/>
-    <Button text="Log In" variant="primary"/>
-    <Button text="Log In with Google" variant="outline" />
-    </div> 
-  )
+    <AuthLayout>
+      <LoginForm />
+    </AuthLayout>
+  );
 }
