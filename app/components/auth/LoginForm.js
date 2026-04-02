@@ -11,15 +11,15 @@ export default function LoginForm() {
       {/* Header Tabs */}
       <div className="flex items-center justify-between mb-6">
         <div className="relative w-12 h-10 shrink-0">
-          <Image 
-            src="/images/logo.png" 
-            alt="HR Logo" 
+          <Image
+            src="/images/logo.png"
+            alt="HR Logo"
             fill
             sizes="48px"
             className="object-contain"
           />
         </div>
-        
+
         <div className="flex items-center space-x-6 text-sm font-medium">
           <span className="text-primary cursor-default">Sign In</span>
           <Link href="/register" className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -29,10 +29,10 @@ export default function LoginForm() {
       </div>
 
       {/* Form Fields */}
-      <form className="space-y-3 mb-5">
+      <form className="space-y-3 mb-2">
         <Input type="email" placeholder="Email address" required />
         <Input type="password" placeholder="Password" required />
-        
+
         <div className="pt-1">
           <Button type="submit" variant="primary">
             Log In
