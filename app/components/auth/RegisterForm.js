@@ -61,9 +61,6 @@ export default function RegisterForm() {
 
       {/* Footer Links */}
       <div className="mt-4 text-center text-sm">
-        <Link href="#" className="text-gray-500 hover:text-gray-700 hover:underline block mb-1">
-          Forgot password?
-        </Link>
         <span className="text-gray-700">
           Do you have an account?{" "}
           <Link href="/login" className="text-accent hover:underline">
