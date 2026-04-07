@@ -17,7 +17,7 @@ export default function CandidatesBoard({
         CANDIDATE_STATUSES.find((status) => status.key === statusKey);
 
     return (
-        <main className="flex-1 overflow-hidden bg-background px-[10px] py-[12px]">
+        <main className="flex min-h-0 flex-1 flex-col bg-background px-[10px] py-[12px]">
             <div className="mb-3 flex items-end gap-4 px-[8px] pt-[6px]">
                 <h1 className="text-[32px] font-bold leading-none text-black">
                     AI CRM Candidates
@@ -79,29 +79,28 @@ export default function CandidatesBoard({
                 </div>
             </div>
 
-            <div className="overflow-hidden px-[8px]">
-                <div className="h-[583px] w-[1050px] rounded-[10px] bg-[#EAEAEAA3] p-[6px]">
-                    <div className="flex h-full gap-[10px]">
-                        <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden pr-[2px]">
-                            {PRIMARY_COLUMNS.map((statusKey) => {
-                                const status = getStatusMeta(statusKey);
-                                const items = getCandidatesByStatus(statusKey);
+            <div className="min-h-0 flex-1 px-[8px]">
+                <div className="flex h-full min-h-0 rounded-[10px] bg-[#EAEAEAA3] p-[6px]">
+                    <div className="flex min-h-0 flex-1 gap-[10px] overflow-x-auto overflow-y-hidden">
+                        {PRIMARY_COLUMNS.map((statusKey) => {
+                            const status = getStatusMeta(statusKey);
+                            const items = getCandidatesByStatus(statusKey);
 
-                                return (
-                                    <CandidateColumn
-                                        key={status.key}
-                                        title={status.label}
-                                        count={items.length}
-                                        headerClassName={status.headerClassName}
-                                        candidates={items}
-                                        selectedCandidateId={selectedCandidateId}
-                                        onSelectCandidate={onSelectCandidate}
-                                    />
-                                );
-                            })}
-                        </div>
+                            return (
+                                <CandidateColumn
+                                    key={status.key}
+                                    title={status.label}
+                                    count={items.length}
+                                    headerClassName={status.headerClassName}
+                                    candidates={items}
+                                    selectedCandidateId={selectedCandidateId}
+                                    onSelectCandidate={onSelectCandidate}
+                                    fullHeight
+                                />
+                            );
+                        })}
 
-                        <div className="flex w-[200px] shrink-0 flex-col gap-[10px]">
+                        <div className="flex min-h-0 w-[200px] shrink-0 flex-col gap-[10px]">
                             {STACKED_COLUMNS.map((statusKey) => {
                                 const status = getStatusMeta(statusKey);
                                 const items = getCandidatesByStatus(statusKey);
@@ -115,6 +114,7 @@ export default function CandidatesBoard({
                                         candidates={items}
                                         selectedCandidateId={selectedCandidateId}
                                         onSelectCandidate={onSelectCandidate}
+                                        compact
                                     />
                                 );
                             })}

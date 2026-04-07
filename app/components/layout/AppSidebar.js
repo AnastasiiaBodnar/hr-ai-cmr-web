@@ -1,5 +1,23 @@
 import Image from "next/image";
 
+const sidebarItems = [
+    {
+        label: "dashboard",
+        icon: "/icons/dashboard.png",
+        alt: "Dashboard",
+    },
+    {
+        label: "candidates",
+        icon: "/icons/group.png",
+        alt: "Candidates",
+    },
+    {
+        label: "vacancy",
+        icon: "/icons/bag.png",
+        alt: "Vacancy",
+    },
+];
+
 export default function AppSidebar() {
     return (
         <aside className="flex h-screen w-[103px] shrink-0 flex-col items-center bg-primary py-5 text-white">
@@ -7,12 +25,20 @@ export default function AppSidebar() {
                 <Image src="/icons/hr.png" alt="HR logo" width={46} height={46} />
             </div>
 
-            <button className="flex flex-col items-center gap-2 rounded-[18px] px-3 py-3">
-                <Image src="/icons/group.png" alt="Candidates" width={24} height={24} />
-                <span className="caption-text text-[14px] font-normal leading-none text-white">
-          candidates
-        </span>
-            </button>
+            <nav className="flex flex-col items-center gap-7">
+                {sidebarItems.map((item) => (
+                    <button
+                        key={item.label}
+                        type="button"
+                        className="flex flex-col items-center gap-2 rounded-[18px] px-3 py-2"
+                    >
+                        <Image src={item.icon} alt={item.alt} width={20} height={20} />
+                        <span className="caption-text text-[12px] leading-none text-white">
+              {item.label}
+            </span>
+                    </button>
+                ))}
+            </nav>
         </aside>
     );
 }

@@ -7,9 +7,15 @@ export default function CandidateColumn({
                                             candidates,
                                             selectedCandidateId,
                                             onSelectCandidate,
+                                            fullHeight = false,
+                                            compact = false,
                                         }) {
+    const sectionClassName = fullHeight
+        ? "flex min-h-0 h-full w-[200px] shrink-0 flex-col rounded-[10px] bg-white p-[5px]"
+        : "flex h-[176px] w-[200px] shrink-0 flex-col rounded-[10px] bg-white p-[5px]";
+
     return (
-        <section className="flex h-[176px] w-[200px] shrink-0 flex-col rounded-[10px] bg-white p-[5px]">
+        <section className={sectionClassName}>
             <div
                 className={`mb-[6px] flex h-[37px] w-[190px] shrink-0 items-center justify-between rounded-[9px] px-[12px] text-[12px] font-normal ${headerClassName}`}
             >
@@ -20,7 +26,7 @@ export default function CandidateColumn({
                 <span>({count})</span>
             </div>
 
-            <div className="flex-1 overflow-y-auto">
+            <div className="min-h-0 flex-1 overflow-y-auto">
                 {candidates.length ? (
                     <div className="flex flex-col items-center gap-[6px] pr-[2px]">
                         {candidates.map((candidate) => (

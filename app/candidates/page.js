@@ -21,17 +21,20 @@ export default function CandidatesPage() {
         <div className="flex h-screen overflow-hidden bg-background">
             <AppSidebar />
 
-            <div className="flex min-w-0 flex-1 overflow-hidden">
-                <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-                    <AppTopbar />
-                    <CandidatesBoard
-                        candidates={mockCandidates}
-                        selectedCandidateId={selectedCandidateId}
-                        onSelectCandidate={setSelectedCandidateId}
-                    />
-                </div>
+            <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+                <AppTopbar />
 
-                <CandidateInsightPanel candidate={selectedCandidate} />
+                <div className="flex min-h-0 flex-1 overflow-hidden">
+                    <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+                        <CandidatesBoard
+                            candidates={mockCandidates}
+                            selectedCandidateId={selectedCandidateId}
+                            onSelectCandidate={setSelectedCandidateId}
+                        />
+                    </div>
+
+                    <CandidateInsightPanel candidate={selectedCandidate} />
+                </div>
             </div>
         </div>
     );
