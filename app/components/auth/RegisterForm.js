@@ -147,11 +147,11 @@ export default function RegisterForm() {
       </div>
 
       <div className="space-y-2">
-        <Button type="button" variant="outline">
+        <Button type="button" variant="outline" onClick={() => alert('Feature in development.')}>
           Register with Google
           <Image src="/images/LogoGoogle.png" alt="Google" width={20} height={20} className="ml-1" />
         </Button>
-        <Button type="button" variant="outline">
+        <Button type="button" variant="outline" onClick={() => alert('Feature in development.')}>
           Register with LinkedIn
           <Image src="/images/LogoLinkedIn.png" alt="LinkedIn" width={20} height={20} className="ml-1" />
         </Button>

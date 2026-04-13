@@ -92,11 +92,11 @@ export default function LoginForm() {
 
       {/* Social Logins */}
       <div className="space-y-2.5">
-        <Button type="button" variant="outline">
+        <Button type="button" variant="outline" onClick={() => alert('Feature in development.')}>
           Log In with Google
           <Image src="/images/LogoGoogle.png" alt="Google" width={20} height={20} className="ml-1" />
         </Button>
-        <Button type="button" variant="outline">
+        <Button type="button" variant="outline" onClick={() => alert('Feature in development.')}>
           Log In with LinkedIn
           <Image src="/images/LogoLinkedIn.png" alt="LinkedIn" width={20} height={20} className="ml-1" />
         </Button>
