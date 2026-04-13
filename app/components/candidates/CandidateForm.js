@@ -1,10 +1,27 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import Input from '@/app/components/ui/Input'
 import Button from '@/app/components/ui/Button'
 
 export default function CandidateForm({ isEditing = false, onClose }) {
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phone: '',
+        position: '',
+        salary: '',
+        status: 'New',
+        linkedIn: '',
+        notes: '',
+    })
+
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
             <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-8 overflow-hidden">
@@ -23,36 +40,37 @@ export default function CandidateForm({ isEditing = false, onClose }) {
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Candidate fullname<span className="text-red-500">*</span>
                             </label>
-                            <Input name="fullName" required className="py-2.5 text-sm" />
+                            <Input name="fullName" value={formData.fullName} onChange={handleChange} required className="py-2.5 text-sm" />
                         </div>
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Email address<span className="text-red-500">*</span>
                             </label>
-                            <Input type="email" name="email" required className="py-2.5 text-sm" />
+                            <Input type="email" name="email" value={formData.email} onChange={handleChange} required className="py-2.5 text-sm" />
                         </div>
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Phone number
                             </label>
-                            <Input type="tel" name="phone" className="py-2.5 text-sm" />
+                            <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="py-2.5 text-sm" />
                         </div>
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Position<span className="text-red-500">*</span>
                             </label>
-                            <Input name="position" required className="py-2.5 text-sm" />
+                            <Input name="position" value={formData.position} onChange={handleChange} required className="py-2.5 text-sm" />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-3 gap-5 mb-5">
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">Desired salary</label>
-                            <Input name="salary" className="py-2.5 text-sm" />
+                            <Input name="salary" value={formData.salary} onChange={handleChange} className="py-2.5 text-sm" />
                         </div>
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">Status</label>
-                            <select name="status" className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:border-gray-400 bg-white">
+                            <select name="status" value={formData.status} onChange={handleChange}
+                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:border-gray-400 bg-white">
                                 <option value="New">New</option>
                                 <option value="In Progress">In Progress</option>
                                 <option value="Interview">Interview</option>
@@ -62,18 +80,7 @@ export default function CandidateForm({ isEditing = false, onClose }) {
                         </div>
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">Profile LinkedIn</label>
-                            <Input name="linkedIn" className="py-2.5 text-sm" />
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-5 mb-5">
-                        <div>
-                            <label className="block text-base font-semibold text-gray-500 mb-1.5">Notes/Summary</label>
-                            <textarea name="notes" rows="4" className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm outline-none focus:border-gray-400 resize-none"></textarea>
-                        </div>
-                        <div>
-                            <label className="block text-base font-semibold text-gray-500 mb-1.5">Upload resume (PDF/.docx)</label>
-                            <input type="file" name="resume" accept=".pdf,.doc,.docx" className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm" />
+                            <Input name="linkedIn" value={formData.linkedIn} onChange={handleChange} className="py-2.5 text-sm" />
                         </div>
                     </div>
 
