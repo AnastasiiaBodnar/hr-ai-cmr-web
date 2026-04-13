@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/ui/Input";
 import Button from "@/app/components/ui/Button";
-import { login } from "@/lib/api/auth";
+import { login } from "@/lib/auth";
 
 export default function LoginForm() {
   const router = useRouter();
