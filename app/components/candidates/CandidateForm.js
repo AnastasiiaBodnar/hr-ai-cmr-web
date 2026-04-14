@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Input from '@/app/components/ui/Input'
 import Button from '@/app/components/ui/Button'
+import Select from '@/app/components/ui/Select'
 import Image from 'next/image'
 
 export default function CandidateForm({ isEditing = false, onClose }) {
@@ -84,18 +85,18 @@ export default function CandidateForm({ isEditing = false, onClose }) {
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Status
                             </label>
-                            <select
+                            <Select
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm outline-none transition-colors focus:border-gray-400 bg-white"
-                            >
-                                <option value="New">New</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Interview">Interview</option>
-                                <option value="Hired">Hired</option>
-                                <option value="Rejected">Rejected</option>
-                            </select>
+                                options={[
+                                    { value: 'New', label: 'New' },
+                                    { value: 'In Progress', label: 'In Progress' },
+                                    { value: 'Interview', label: 'Interview' },
+                                    { value: 'Hired', label: 'Hired' },
+                                    { value: 'Rejected', label: 'Rejected' },
+                                ]}
+                            />
                         </div>
 
                         <div>
