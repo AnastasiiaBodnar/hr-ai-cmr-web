@@ -20,13 +20,50 @@ export default function CandidateForm({ isEditing = false, candidateId = null, i
 
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [fieldErrors, setFieldErrors] = useState({})
     const [successMessage, setSuccessMessage] = useState(null)
     const [resumeFile, setResumeFile] = useState(null)
     const fileInputRef = useRef(null)
 
     const handleChange = (e) => {
-        const { name, value } = e.target
+        let { name, value } = e.target
+
+        if (name === 'phone') {
+            value = value.replace(/\D/g, '')
+        }
+
         setFormData((prev) => ({ ...prev, [name]: value }))
+        setFieldErrors((prev) => ({ ...prev, [name]: null }))
+    }
+
+    const validateField = (field, value) => {
+        switch (field) {
+            case 'fullName':
+                if (!value || value.trim().split(/\s+/).length < 2)
+                    setFieldErrors((f) => ({ ...f, fullName: 'Please enter full name (first and last)' }))
+                break
+            case 'email':
+                if (!value || !value.includes('@'))
+                    setFieldErrors((f) => ({ ...f, email: 'Invalid email address' }))
+                break
+            case 'position':
+                if (!value || !value.trim())
+                    setFieldErrors((f) => ({ ...f, position: 'Position is required' }))
+                break
+            case 'phone':
+                if (value && !/^\d+$/.test(value))
+                    setFieldErrors((f) => ({ ...f, phone: 'Only digits are allowed' }))
+                break
+        }
+    }
+
+    const validate = () => {
+        const errors = {}
+        if (!formData.fullName || formData.fullName.trim().split(/\s+/).length < 2) errors.fullName = 'Please enter full name (first and last)'
+        if (!formData.email || !formData.email.includes('@')) errors.email = 'Invalid email address'
+        if (!formData.position || !formData.position.trim()) errors.position = 'Position is required'
+        if (formData.phone && !/^\d+$/.test(formData.phone)) errors.phone = 'Only digits are allowed'
+        return errors
     }
 
     const handleFileChange = (e) => {
@@ -38,6 +75,13 @@ export default function CandidateForm({ isEditing = false, candidateId = null, i
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError(null)
+
+        const errors = validate()
+        if (Object.keys(errors).length > 0) {
+            setFieldErrors(errors)
+            return
+        }
+
         setIsLoading(true)
 
         try {
@@ -49,13 +93,11 @@ export default function CandidateForm({ isEditing = false, candidateId = null, i
                 expectedSalary: formData.salary || undefined,
                 linkedInUrl: formData.linkedIn || undefined,
                 comment: formData.notes || undefined,
-                // cvUrl: formData.cvUrl // Add this when file upload is implemented
             }
 
             if (isEditing && candidateId) {
                 await updateCandidate(candidateId, payload)
 
-                // If status changed
                 if (formData.status !== (initialData?.currentStatus || 'NEW')) {
                     await updateCandidateStatus(candidateId, formData.status)
                 }
@@ -69,7 +111,6 @@ export default function CandidateForm({ isEditing = false, candidateId = null, i
                 }
                 setSuccessMessage('Candidate successfully added!')
 
-                // Clear form for new candidate
                 setFormData({
                     fullName: '',
                     email: '',
@@ -83,7 +124,6 @@ export default function CandidateForm({ isEditing = false, candidateId = null, i
                 setResumeFile(null)
             }
 
-            // Wait 2 seconds to let user read the success message, then close
             setTimeout(() => {
                 setSuccessMessage(null)
                 if (onClose) onClose(true)
@@ -134,28 +174,32 @@ export default function CandidateForm({ isEditing = false, candidateId = null, i
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Candidate fullname<span className="text-red-500">*</span>
                             </label>
-                            <Input name="fullName" value={formData.fullName} onChange={handleChange} required className="py-2.5 text-sm" />
+                            <Input name="fullName" value={formData.fullName} onChange={handleChange} onBlur={(e) => validateField('fullName', e.target.value)} required error={!!fieldErrors.fullName} className="py-2.5 text-sm" />
+                            {fieldErrors.fullName && <p className="text-red-500 text-xs mt-1">{fieldErrors.fullName}</p>}
                         </div>
 
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Email address<span className="text-red-500">*</span>
                             </label>
-                            <Input type="email" name="email" value={formData.email} onChange={handleChange} required className="py-2.5 text-sm" />
+                            <Input type="email" name="email" value={formData.email} onChange={handleChange} onBlur={(e) => validateField('email', e.target.value)} required error={!!fieldErrors.email} className="py-2.5 text-sm" />
+                            {fieldErrors.email && <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>}
                         </div>
 
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Phone number
                             </label>
-                            <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="py-2.5 text-sm" />
+                            <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} onBlur={(e) => validateField('phone', e.target.value)} error={!!fieldErrors.phone} className="py-2.5 text-sm" />
+                            {fieldErrors.phone && <p className="text-red-500 text-xs mt-1">{fieldErrors.phone}</p>}
                         </div>
 
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Position<span className="text-red-500">*</span>
                             </label>
-                            <Input name="position" value={formData.position} onChange={handleChange} required className="py-2.5 text-sm" />
+                            <Input name="position" value={formData.position} onChange={handleChange} onBlur={(e) => validateField('position', e.target.value)} required error={!!fieldErrors.position} className="py-2.5 text-sm" />
+                            {fieldErrors.position && <p className="text-red-500 text-xs mt-1">{fieldErrors.position}</p>}
                         </div>
                     </div>
 
