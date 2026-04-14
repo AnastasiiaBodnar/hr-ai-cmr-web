@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Input from '@/app/components/ui/Input'
-import Button from '@/app/components/ui/Button'
 import Select from '@/app/components/ui/Select'
 import Image from 'next/image'
 
@@ -138,12 +137,19 @@ export default function CandidateForm({ isEditing = false, onClose }) {
 
                     {/* Buttons */}
                     <div className="flex items-center justify-end space-x-3">
-                        <Button type="button" variant="outline" onClick={onClose} className="!text-teal-600 !border-teal-200 hover:!bg-teal-50 !px-6 py-2 text-sm font-medium">
+                        <button 
+                            type="button" 
+                            onClick={onClose} 
+                            className="flex items-center justify-center w-28 h-10 rounded-lg border border-accent text-accent bg-transparent hover:bg-accent/10 transition-colors text-base font-medium"
+                        >
                             Cancel
-                        </Button>
-                        <Button type="button" variant="primary" className="!bg-teal-600 hover:!bg-teal-700 !border-none !px-6 py-2 text-sm font-medium">
+                        </button>
+                        <button 
+                            type="button" 
+                            className="flex items-center justify-center px-6 h-10 rounded-lg border border-accent bg-accent text-white hover:opacity-90 transition-opacity text-base font-medium"
+                        >
                             {isEditing ? 'Edit candidate' : 'Add candidate'}
-                        </Button>
+                        </button>
                     </div>
                 </div>
             </div>
