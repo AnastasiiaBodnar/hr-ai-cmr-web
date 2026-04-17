@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Input from '@/app/components/ui/Input'
 import Button from '@/app/components/ui/Button'
 import { register } from '@/lib/auth'
+import StatusCard from './StatusCard'
 
 export default function RegisterForm() {
   const router = useRouter()
@@ -17,6 +18,7 @@ export default function RegisterForm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState({})
+  const [isRegistered, setIsRegistered] = useState(false)
 
   const validateField = (field, value) => {
     switch (field) {
@@ -74,13 +76,26 @@ export default function RegisterForm() {
     setLoading(true)
     try {
       await register(name, email, password)
-      router.push('/dashboard')
+      setIsRegistered(true)
     } catch (err) {
       setError(err.message)
       setFieldErrors({ name: true, email: true, password: true, repeatPassword: true })
     } finally {
       setLoading(false)
     }
+  }
+
+  if (isRegistered) {
+    return (
+      <StatusCard 
+        type="success"
+        title="Registration successful!"
+        description={`We've sent a verification link to:\n${email}\n\nPlease check your email to continue.`}
+        actions={[
+          { label: 'Back to Log In', href: '/login', variant: 'outline-success' }
+        ]}
+      />
+    )
   }
 
   return (
