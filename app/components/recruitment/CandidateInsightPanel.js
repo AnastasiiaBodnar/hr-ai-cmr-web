@@ -100,7 +100,7 @@ function InsightTab({ candidate }) {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <div className="size-[72px] shrink-0 aspect-square rounded-full border-[6px] border-[#20B77A] flex items-center justify-center">'
+                    <div className="flex h-[72px] w-[72px] shrink-0 aspect-square items-center justify-center rounded-full border-[6px] border-[#20B77A]">
                         <div className="text-center leading-tight">
                             <div className="text-[15px] font-bold text-[#20B77A]">
                                 {candidate.matchPercent}%
@@ -380,7 +380,7 @@ function ProfileTab({ candidate }) {
     );
 }
 
-export default function CandidateInsightPanel({ candidate }) {
+export default function CandidateInsightPanel({ candidate, onClose }) {
     const [activeTab, setActiveTab] = useState("Insight");
 
     const content = useMemo(() => {
@@ -397,37 +397,30 @@ export default function CandidateInsightPanel({ candidate }) {
         return <InsightTab candidate={candidate} />;
     }, [activeTab, candidate]);
 
-    if (!candidate) {
-        return (
-            <aside className="flex h-[715px] w-[263px] shrink-0 flex-col bg-white">
-                <div className="flex">
+    if (!candidate) return null;
+
+    return (
+        <aside className="flex h-full min-h-0 w-[263px] shrink-0 flex-col bg-white xl:w-[300px] 2xl:w-[340px]">
+            <div className="flex items-center justify-between border-b border-black/10 px-2">
+                <div className="flex flex-1">
                     {tabs.map((tab) => (
                         <TabButton
                             key={tab}
                             label={tab}
-                            isActive={tab === "Insight"}
-                            onClick={() => {}}
+                            isActive={activeTab === tab}
+                            onClick={() => setActiveTab(tab)}
                         />
                     ))}
                 </div>
-                <div className="flex flex-1 items-center justify-center text-[14px] text-black/40">
-                    Select a candidate
-                </div>
-            </aside>
-        );
-    }
 
-    return (
-        <aside className="flex h-[715px] w-[263px] shrink-0 flex-col bg-white">
-            <div className="flex">
-                {tabs.map((tab) => (
-                    <TabButton
-                        key={tab}
-                        label={tab}
-                        isActive={activeTab === tab}
-                        onClick={() => setActiveTab(tab)}
-                    />
-                ))}
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[18px] text-black/50 hover:bg-black/5"
+                    aria-label="Close panel"
+                >
+                    ×
+                </button>
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto">{content}</div>

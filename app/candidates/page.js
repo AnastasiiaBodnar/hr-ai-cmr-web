@@ -8,14 +8,26 @@ import CandidateInsightPanel from "@/app/components/recruitment/CandidateInsight
 import { mockCandidates } from "@/lib/mocks/candidates";
 
 export default function CandidatesPage() {
-    const [selectedCandidateId, setSelectedCandidateId] = useState("2");
+    const [selectedCandidateId, setSelectedCandidateId] = useState(null);
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     const selectedCandidate = useMemo(() => {
+        if (!selectedCandidateId) return null;
+
         return (
             mockCandidates.find((candidate) => candidate.id === selectedCandidateId) ||
-            mockCandidates[0]
+            null
         );
     }, [selectedCandidateId]);
+
+    const handleSelectCandidate = (candidateId) => {
+        setSelectedCandidateId(candidateId);
+        setIsPanelOpen(true);
+    };
+
+    const handleClosePanel = () => {
+        setIsPanelOpen(false);
+    };
 
     return (
         <div className="flex h-screen overflow-hidden bg-background">
@@ -29,11 +41,17 @@ export default function CandidatesPage() {
                         <CandidatesBoard
                             candidates={mockCandidates}
                             selectedCandidateId={selectedCandidateId}
-                            onSelectCandidate={setSelectedCandidateId}
+                            onSelectCandidate={handleSelectCandidate}
+                            isPanelOpen={isPanelOpen}
                         />
                     </div>
 
-                    <CandidateInsightPanel candidate={selectedCandidate} />
+                    {isPanelOpen && selectedCandidate ? (
+                        <CandidateInsightPanel
+                            candidate={selectedCandidate}
+                            onClose={handleClosePanel}
+                        />
+                    ) : null}
                 </div>
             </div>
         </div>

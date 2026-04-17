@@ -7,39 +7,61 @@ export default function CandidateColumn({
                                             candidates,
                                             selectedCandidateId,
                                             onSelectCandidate,
-                                            fullHeight = false,
                                             compact = false,
+                                            wide = false,
+                                            isPanelOpen = false,
+                                            fluid = false,
+                                            compactMode = false,
                                         }) {
-    const sectionClassName = fullHeight
-        ? "flex min-h-0 h-full w-[200px] shrink-0 flex-col rounded-[10px] bg-white p-[5px]"
-        : "flex h-[176px] w-[200px] shrink-0 flex-col rounded-[10px] bg-white p-[5px]";
+    const scrollWidth = wide
+        ? compactMode
+            ? "w-[220px]"
+            : "w-[250px]"
+        : compactMode
+            ? "w-[190px]"
+            : "w-[240px]";
+
+    const sectionClassName = fluid
+        ? compact
+            ? "flex h-[176px] min-w-0 flex-col rounded-[12px] bg-white p-[6px]"
+            : "flex min-h-[176px] max-h-full min-w-0 flex-col rounded-[12px] bg-white p-[6px]"
+        : compact
+            ? `flex h-[176px] ${scrollWidth} shrink-0 flex-col rounded-[12px] bg-white p-[6px]`
+            : `flex min-h-[176px] max-h-full ${scrollWidth} shrink-0 flex-col rounded-[12px] bg-white p-[6px]`;
+
+    const contentClassName = compact
+        ? "min-h-0 flex-1 overflow-y-auto"
+        : "flex-1 overflow-y-auto";
 
     return (
         <section className={sectionClassName}>
             <div
-                className={`mb-[6px] flex h-[37px] w-[190px] shrink-0 items-center justify-between rounded-[9px] px-[12px] text-[12px] font-normal ${headerClassName}`}
+                className={`mb-[8px] flex h-[37px] w-full shrink-0 items-center justify-between rounded-[10px] px-[12px] text-[12px] font-normal ${headerClassName}`}
             >
-                <div className="flex items-center gap-2">
+                <div className="flex min-w-0 items-center gap-2">
                     <span className="text-[11px]">◉</span>
-                    <span>{title}</span>
+                    <span className="truncate">{title}</span>
                 </div>
-                <span>({count})</span>
+                <span className="shrink-0">({count})</span>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className={contentClassName}>
                 {candidates.length ? (
-                    <div className="flex flex-col items-center gap-[6px] pr-[2px]">
+                    <div className="flex flex-col gap-[8px] pr-[2px]">
                         {candidates.map((candidate) => (
                             <CandidateCard
                                 key={candidate.id}
                                 candidate={candidate}
                                 isSelected={candidate.id === selectedCandidateId}
                                 onSelect={onSelectCandidate}
+                                isPanelOpen={isPanelOpen}
+                                fluid={fluid}
+                                compactMode={compactMode}
                             />
                         ))}
                     </div>
                 ) : (
-                    <div className="flex h-full items-center justify-center rounded-[8px] bg-white text-[14px] text-black/25">
+                    <div className="flex h-[122px] items-center justify-center rounded-[10px] bg-white text-[14px] text-black/25">
                         empty
                     </div>
                 )}
