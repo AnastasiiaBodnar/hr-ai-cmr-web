@@ -5,6 +5,7 @@ import Image from "next/image";
 import CandidateColumn from "./CandidateColumn";
 import { CANDIDATE_STATUSES } from "@/lib/constants/candidate-statuses";
 import CandidatesListView from "./CandidatesListView";
+import FilterDropdown from "@/app/components/ui/FilterDropdown";
 
 const PRIMARY_COLUMNS = ["NEW", "SCREENING", "INTERVIEW_TEST", "OFFER"];
 const STACKED_COLUMNS = ["HIRED", "REJECTED"];
@@ -19,6 +20,12 @@ export default function CandidatesBoard({
                                             onChangeViewMode,
                                             searchValue,
                                             isSearchActive,
+                                            selectedStatuses,
+                                            selectedPosition,
+                                            onStatusChange,
+                                            onPositionChange,
+                                            onResetFilters,
+                                            positionOptions,
                                         }) {
     const [windowWidth, setWindowWidth] = useState(0);
 
@@ -70,24 +77,34 @@ export default function CandidatesBoard({
                 <div className="flex items-center gap-3">
                     <span className="text-[16px] font-normal text-black">Filter by</span>
 
-                    <button className="flex h-[30px] items-center gap-1 rounded-[4px] border border-black/15 bg-white px-3 text-[13px] text-black/50">
-                        <span>Position</span>
-                        <Image
-                            src="/icons/arrow.png"
-                            alt="Open position filter"
-                            width={10}
-                            height={10}
-                        />
-                    </button>
+                    <FilterDropdown
+                        placeholder="Position"
+                        options={positionOptions}
+                        value={selectedPosition}
+                        onChange={onPositionChange}
+                    />
 
-                    <button className="flex h-[30px] items-center gap-1 rounded-[4px] border border-black/15 bg-white px-3 text-[13px] text-black/50">
-                        <span>Status</span>
-                        <Image
-                            src="/icons/arrow.png"
-                            alt="Open status filter"
-                            width={10}
-                            height={10}
-                        />
+                    <FilterDropdown
+                        placeholder="Status"
+                        options={[
+                            { label: "New", value: "NEW" },
+                            { label: "Screening", value: "SCREENING" },
+                            { label: "Interview/Test", value: "INTERVIEW_TEST" },
+                            { label: "Offer", value: "OFFER" },
+                            { label: "Hired", value: "HIRED" },
+                            { label: "Rejected", value: "REJECTED" },
+                        ]}
+                        value={selectedStatuses}
+                        onChange={onStatusChange}
+                        multi
+                    />
+
+                    <button
+                        type="button"
+                        onClick={onResetFilters}
+                        className="h-[38px] rounded-[6px] border border-black/15 bg-white px-4 text-[14px] text-black/55"
+                    >
+                        Скинути фільтри
                     </button>
                 </div>
 
