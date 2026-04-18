@@ -400,7 +400,7 @@ export default function CandidateInsightPanel({ candidate, onClose }) {
     if (!candidate) return null;
 
     return (
-        <aside className="flex h-full min-h-0 w-[263px] shrink-0 flex-col bg-white xl:w-[300px] 2xl:w-[340px]">
+        <aside className="flex h-full min-h-0 w-[263px] shrink-0 flex-col bg-white">
             <div className="flex items-center justify-between border-b border-black/10 px-2">
                 <div className="flex flex-1">
                     {tabs.map((tab) => (
