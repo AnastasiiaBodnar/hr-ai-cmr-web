@@ -104,7 +104,7 @@ export default function LoginForm() {
 
       {/* Footer Links */}
       <div className="mt-5 text-center text-sm">
-        <Link href="#" className="text-gray-700 hover:underline block mb-1">
+        <Link href="/forgot-password" title="Forgot password" className="text-gray-700 hover:underline block mb-1">
           Forgot password?
         </Link>
         <span className="text-gray-700">
