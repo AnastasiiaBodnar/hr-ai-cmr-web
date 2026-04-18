@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function AuthLayout({ children }) {
+export default function AuthLayout({ children, hideHeader = false }) {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* LEFT AREA */}
@@ -45,10 +45,12 @@ export default function AuthLayout({ children }) {
 
       {/* RIGHT AREA*/}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 bg-background">
-        <div className="text-center mb-4 lg:mb-6 mt-8 lg:mt-0">
-          <h2 className="text-2xl font-bold text-primary mb-1">Welcome to the AICRM</h2>
-          <p className="text-sm text-gray-500">Please sign in or register to continue.</p>
-        </div>
+        {!hideHeader && (
+          <div className="text-center mb-4 lg:mb-6 mt-8 lg:mt-0">
+            <h2 className="text-2xl font-bold text-primary mb-1">Welcome to the AICRM</h2>
+            <p className="text-sm text-gray-500">Please sign in or register to continue.</p>
+          </div>
+        )}
 
         <div className="flex justify-center flex-none">
           <div className="w-full max-w-[420px]">
