@@ -8,6 +8,7 @@ import CandidatesBoard from "@/app/components/recruitment/CandidatesBoard";
 import CandidateInsightPanel from "@/app/components/recruitment/CandidateInsightPanel";
 import DeleteCandidateModal from "@/app/components/ui/DeleteCandidateModal";
 import { mockCandidates } from "@/lib/mocks/candidates";
+import { updateCandidateStatus } from "@/lib/candidates";
 
 export default function CandidatesPageClient() {
     const router = useRouter();
@@ -25,6 +26,37 @@ export default function CandidatesPageClient() {
 
     const selectedStatuses = searchParams.getAll("status");
     const selectedPosition = searchParams.get("position") || "";
+
+    const [pendingCandidateIds, setPendingCandidateIds] = useState([]);
+
+    const handleMoveCandidate = async ({ candidateId, targetColumnKey }) => {
+        const nextStatus = mapColumnKeyToStatus(targetColumnKey);
+
+        const previousCandidates = candidates;
+        const currentCandidate = candidates.find((candidate) => candidate.id === candidateId);
+
+        if (!currentCandidate) return;
+        if (currentCandidate.status === nextStatus) return;
+
+        setPendingCandidateIds((prev) => [...prev, candidateId]);
+
+        setCandidates((prev) =>
+            prev.map((candidate) =>
+                candidate.id === candidateId
+                    ? { ...candidate, status: nextStatus }
+                    : candidate
+            )
+        );
+
+        try {
+            await updateCandidateStatus(candidateId, nextStatus);
+        } catch (error) {
+            setCandidates(previousCandidates);
+            console.error("Failed to update candidate status:", error);
+        } finally {
+            setPendingCandidateIds((prev) => prev.filter((id) => id !== candidateId));
+        }
+    };
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -155,6 +187,14 @@ export default function CandidatesPageClient() {
         setCandidateToDelete(null);
     };
 
+    function mapColumnKeyToStatus(columnKey) {
+        if (columnKey === "INTERVIEW_TEST") {
+            return "INTERVIEW";
+        }
+
+        return columnKey;
+    }
+
     return (
         <div className="flex h-screen overflow-hidden bg-background">
             <AppSidebar />
@@ -172,6 +212,8 @@ export default function CandidatesPageClient() {
                             selectedCandidateId={selectedCandidateId}
                             onSelectCandidate={handleSelectCandidate}
                             onDeleteCandidate={handleAskDeleteCandidate}
+                            onMoveCandidate={handleMoveCandidate}
+                            pendingCandidateIds={pendingCandidateIds}
                             isPanelOpen={isPanelOpen}
                             viewMode={viewMode}
                             onChangeViewMode={setViewMode}

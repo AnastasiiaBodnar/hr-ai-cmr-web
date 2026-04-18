@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 export default function CandidateCard({
                                           candidate,
@@ -6,7 +8,17 @@ export default function CandidateCard({
                                           onSelect,
                                           fluid = false,
                                           compactMode = false,
+                                          isLoading = false,
                                       }) {
+    const { attributes, listeners, setNodeRef, transform, isDragging } =
+        useDraggable({
+            id: candidate.id,
+        });
+
+    const style = {
+        transform: CSS.Translate.toString(transform),
+    };
+
     const hasMeta = Boolean(candidate.level && candidate.salaryFrom);
     const cardHeightClass = hasMeta ? "h-[120px]" : "h-[110px]";
 
@@ -18,13 +30,17 @@ export default function CandidateCard({
 
     return (
         <button
+            ref={setNodeRef}
+            style={style}
             type="button"
             onClick={() => onSelect(candidate.id)}
             className={`${cardWidthClass} ${cardHeightClass} rounded-[10px] border bg-white px-[12px] py-[10px] text-left shadow-sm transition ${
                 isSelected
                     ? "border-[#86E6BE] shadow-[0_2px_8px_rgba(16,185,129,0.15)]"
                     : "border-black/10"
-            }`}
+            } ${isDragging ? "opacity-60" : ""} ${isLoading ? "opacity-70" : ""}`}
+            {...listeners}
+            {...attributes}
         >
             <div className="flex h-full flex-col justify-between">
                 <div>
@@ -68,9 +84,15 @@ export default function CandidateCard({
                         ) : null}
                     </div>
 
-                    <p className="caption-text text-[10px] text-black/30">
-                        {candidate.createdAt}
-                    </p>
+                    <div className="flex items-center gap-2">
+                        {isLoading ? (
+                            <span className="text-[10px] text-primary">Saving...</span>
+                        ) : null}
+
+                        <p className="caption-text text-[10px] text-black/30">
+                            {candidate.createdAt}
+                        </p>
+                    </div>
                 </div>
             </div>
         </button>

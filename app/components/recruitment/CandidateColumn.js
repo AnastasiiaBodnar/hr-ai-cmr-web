@@ -1,6 +1,8 @@
+import { useDroppable } from "@dnd-kit/core";
 import CandidateCard from "./CandidateCard";
 
 export default function CandidateColumn({
+                                            columnKey,
                                             title,
                                             count,
                                             headerClassName,
@@ -9,10 +11,14 @@ export default function CandidateColumn({
                                             onSelectCandidate,
                                             compact = false,
                                             wide = false,
-                                            isPanelOpen = false,
                                             fluid = false,
                                             compactMode = false,
+                                            pendingCandidateIds = [],
                                         }) {
+    const { setNodeRef, isOver } = useDroppable({
+        id: columnKey,
+    });
+
     const scrollWidth = wide
         ? compactMode
             ? "w-[220px]"
@@ -34,7 +40,10 @@ export default function CandidateColumn({
         : "flex-1 overflow-y-auto";
 
     return (
-        <section className={sectionClassName}>
+        <section
+            ref={setNodeRef}
+            className={`${sectionClassName} ${isOver ? "ring-2 ring-primary/30" : ""}`}
+        >
             <div
                 className={`mb-[8px] flex h-[37px] w-full shrink-0 items-center justify-between rounded-[10px] px-[12px] text-[12px] font-normal ${headerClassName}`}
             >
@@ -54,9 +63,9 @@ export default function CandidateColumn({
                                 candidate={candidate}
                                 isSelected={candidate.id === selectedCandidateId}
                                 onSelect={onSelectCandidate}
-                                isPanelOpen={isPanelOpen}
                                 fluid={fluid}
                                 compactMode={compactMode}
+                                isLoading={pendingCandidateIds.includes(candidate.id)}
                             />
                         ))}
                     </div>
