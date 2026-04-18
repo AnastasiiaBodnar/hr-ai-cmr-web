@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AppSidebar from "@/app/components/layout/AppSidebar";
 import AppTopbar from "@/app/components/layout/AppTopbar";
 import CandidatesBoard from "@/app/components/recruitment/CandidatesBoard";
@@ -15,11 +15,43 @@ export default function CandidatesPage() {
     const [viewMode, setViewMode] = useState("kanban");
     const [candidateToDelete, setCandidateToDelete] = useState(null);
 
+    const [searchInput, setSearchInput] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setDebouncedSearch(searchInput.trim());
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [searchInput]);
+
+    const filteredCandidates = useMemo(() => {
+        const normalizedSearch = debouncedSearch.toLowerCase();
+
+        if (!normalizedSearch || normalizedSearch.length < 2) {
+            return candidates;
+        }
+
+        return candidates.filter((candidate) => {
+            const name = candidate.fullName?.toLowerCase() || "";
+            const email = candidate.email?.toLowerCase() || "";
+
+            return (
+                name.includes(normalizedSearch) || email.includes(normalizedSearch)
+            );
+        });
+    }, [candidates, debouncedSearch]);
+
     const selectedCandidate = useMemo(() => {
         if (!selectedCandidateId) return null;
 
-        return candidates.find((candidate) => candidate.id === selectedCandidateId) || null;
-    }, [selectedCandidateId, candidates]);
+        return (
+            filteredCandidates.find((candidate) => candidate.id === selectedCandidateId) ||
+            candidates.find((candidate) => candidate.id === selectedCandidateId) ||
+            null
+        );
+    }, [selectedCandidateId, filteredCandidates, candidates]);
 
     const handleSelectCandidate = (candidateId) => {
         setSelectedCandidateId(candidateId);
@@ -58,18 +90,23 @@ export default function CandidatesPage() {
             <AppSidebar />
 
             <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-                <AppTopbar />
+                <AppTopbar
+                    searchValue={searchInput}
+                    onSearchChange={setSearchInput}
+                />
 
                 <div className="flex min-h-0 flex-1 overflow-hidden">
                     <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
                         <CandidatesBoard
-                            candidates={candidates}
+                            candidates={filteredCandidates}
                             selectedCandidateId={selectedCandidateId}
                             onSelectCandidate={handleSelectCandidate}
                             onDeleteCandidate={handleAskDeleteCandidate}
                             isPanelOpen={isPanelOpen}
                             viewMode={viewMode}
                             onChangeViewMode={setViewMode}
+                            searchValue={debouncedSearch}
+                            isSearchActive={debouncedSearch.length >= 2}
                         />
                     </div>
 

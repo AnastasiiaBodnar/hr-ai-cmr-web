@@ -17,6 +17,8 @@ export default function CandidatesBoard({
                                             isPanelOpen,
                                             viewMode,
                                             onChangeViewMode,
+                                            searchValue,
+                                            isSearchActive,
                                         }) {
     const [windowWidth, setWindowWidth] = useState(0);
 
@@ -117,7 +119,11 @@ export default function CandidatesBoard({
             </div>
 
             <div className="min-h-0 flex-1">
-                {viewMode === "list" ? (
+                {isSearchActive && candidates.length === 0 ? (
+                    <div className="flex h-full items-center justify-center rounded-[16px] bg-[#EAEAEAA3] text-[18px] font-medium text-black/45">
+                        Нічого не знайдено
+                    </div>
+                ) : viewMode === "list" ? (
                     <CandidatesListView
                         candidates={candidates}
                         onSelectCandidate={onSelectCandidate}
