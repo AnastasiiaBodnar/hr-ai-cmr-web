@@ -10,6 +10,12 @@ import CreateVacancyModal from '@/app/components/dashboard/CreateVacancyModal';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleVacancyCreated = () => {
+    setRefreshKey(prev => prev + 1);
+    setIsModalOpen(false);
+  };
 
   return (
     <MainLayout>
@@ -21,7 +27,7 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 min-h-[500px]">
           <div className="xl:col-span-2">
-            <JobsOverviewTable />
+            <JobsOverviewTable key={refreshKey} />
           </div>
           <div>
             <TopCandidates />
@@ -38,7 +44,10 @@ export default function Dashboard() {
       </div>
 
       {isModalOpen && (
-        <CreateVacancyModal onClose={() => setIsModalOpen(false)} />
+        <CreateVacancyModal 
+          onClose={() => setIsModalOpen(false)} 
+          onSuccess={handleVacancyCreated}
+        />
       )}
     </MainLayout>
   );
