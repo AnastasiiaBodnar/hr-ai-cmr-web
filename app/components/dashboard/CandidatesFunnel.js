@@ -65,13 +65,13 @@ const CandidatesFunnel = () => {
   const gap = 10;
 
   return (
-    <div className="bg-white rounded-[10px] shadow-[0_0_2px_rgba(0,0,0,0.25)] p-6 h-full flex flex-col">
-      <h3 className="text-xl font-bold text-gray-900 mb-6">Candidates funnel</h3>
+    <div className="bg-white rounded-[10px] shadow-[0_0_2px_rgba(0,0,0,0.25)] p-4 md:p-6 h-full flex flex-col min-w-0">
+      <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6">Candidates funnel</h3>
 
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center overflow-hidden">
         <svg
           viewBox="0 0 500 280"
-          className="w-full max-w-[550px] drop-shadow-sm"
+          className="w-full h-auto max-w-[550px] drop-shadow-sm"
           preserveAspectRatio="xMidYMid meet"
         >
           {FUNNEL_STAGES.map((stage, i) => {

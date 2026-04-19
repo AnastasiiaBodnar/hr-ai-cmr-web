@@ -13,57 +13,57 @@ const TopCandidates = () => {
 
       <div className="flex-1 p-6 space-y-6 overflow-y-auto">
 
-        <div className="flex items-start justify-between group">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 relative rounded-full overflow-hidden border border-gray-50">
+        <div className="flex items-center justify-between group gap-2">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <div className="w-10 h-10 md:w-12 md:h-12 relative rounded-full overflow-hidden border border-gray-50 shrink-0">
               <Image src="/images/avatar.png" alt="Olga Holodenina" fill sizes="48px" className="object-cover" />
             </div>
-            <div>
-              <h4 className="font-bold text-gray-900 text-base">Olga Holodenina</h4>
-              <p className="text-sm text-gray-400 font-medium">Frontend Developer</p>
+            <div className="min-w-0">
+              <h4 className="font-bold text-gray-900 text-sm md:text-base truncate">Olga Holodenina</h4>
+              <p className="text-[12px] md:text-sm text-gray-400 font-medium truncate">Frontend Developer</p>
             </div>
           </div>
-          <div className="text-right">
-            <span className="inline-block px-3 py-1 bg-success rounded-full text-[10px] font-bold text-white mb-1">
+          <div className="flex flex-col items-end shrink-0">
+            <span className="inline-block px-2 md:px-3 py-1 bg-success rounded-full text-[9px] md:text-[10px] font-bold text-white mb-0.5 whitespace-nowrap">
               ✓ 95% match
             </span>
-            <p className="text-[10px] text-gray-300 font-medium">3 day ago</p>
+            <p className="text-[9px] md:text-[10px] text-gray-300 font-medium">3 day ago</p>
           </div>
         </div>
 
-        <div className="flex items-start justify-between group">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 relative rounded-full overflow-hidden border border-gray-50">
+        <div className="flex items-center justify-between group gap-2">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <div className="w-10 h-10 md:w-12 md:h-12 relative rounded-full overflow-hidden border border-gray-50 shrink-0">
               <Image src="/images/avatar.png" alt="Andriy Shevchenko" fill sizes="48px" className="object-cover" />
             </div>
-            <div>
-              <h4 className="font-bold text-gray-900 text-base">Andriy Shevchenko</h4>
-              <p className="text-sm text-gray-400 font-medium">PM</p>
+            <div className="min-w-0">
+              <h4 className="font-bold text-gray-900 text-sm md:text-base truncate">Andriy Shevchenko</h4>
+              <p className="text-[12px] md:text-sm text-gray-400 font-medium truncate">PM</p>
             </div>
           </div>
-          <div className="text-right">
-            <span className="inline-block px-3 py-1 bg-success rounded-full text-[10px] font-bold text-white mb-1">
+          <div className="flex flex-col items-end shrink-0">
+            <span className="inline-block px-2 md:px-3 py-1 bg-success rounded-full text-[9px] md:text-[10px] font-bold text-white mb-0.5 whitespace-nowrap">
               ✓ 92% match
             </span>
-            <p className="text-[10px] text-gray-300 font-medium">1 day ago</p>
+            <p className="text-[9px] md:text-[10px] text-gray-300 font-medium">1 day ago</p>
           </div>
         </div>
 
-        <div className="flex items-start justify-between group">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 relative rounded-full overflow-hidden border border-gray-50">
+        <div className="flex items-center justify-between group gap-2">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <div className="w-10 h-10 md:w-12 md:h-12 relative rounded-full overflow-hidden border border-gray-50 shrink-0">
               <Image src="/images/avatar.png" alt="Olena Zelenska" fill sizes="48px" className="object-cover" />
             </div>
-            <div>
-              <h4 className="font-bold text-gray-900 text-base">Olena Zelenska</h4>
-              <p className="text-sm text-gray-400 font-medium">Designer</p>
+            <div className="min-w-0">
+              <h4 className="font-bold text-gray-900 text-sm md:text-base truncate">Olena Zelenska</h4>
+              <p className="text-[12px] md:text-sm text-gray-400 font-medium truncate">Designer</p>
             </div>
           </div>
-          <div className="text-right">
-            <span className="inline-block px-3 py-1 bg-success rounded-full text-[10px] font-bold text-white mb-1">
+          <div className="flex flex-col items-end shrink-0">
+            <span className="inline-block px-2 md:px-3 py-1 bg-success rounded-full text-[9px] md:text-[10px] font-bold text-white mb-0.5 whitespace-nowrap">
               ✓ 88% match
             </span>
-            <p className="text-[10px] text-gray-300 font-medium">5 day ago</p>
+            <p className="text-[9px] md:text-[10px] text-gray-300 font-medium">5 day ago</p>
           </div>
         </div>
 

@@ -52,9 +52,10 @@ const CustomizedAxisTick = (props) => {
         x={0}
         y={0}
         dy={16}
-        textAnchor="middle"
+        textAnchor="end"
         fill={color}
-        className="text-[12px] font-bold"
+        className="text-[9px] md:text-[12px] font-bold"
+        transform="rotate(-35)"
       >
         {payload.value}
       </text>

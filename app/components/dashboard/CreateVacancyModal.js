@@ -97,7 +97,7 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+            <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-4 md:p-8 overflow-y-auto max-h-[95vh] animate-in fade-in zoom-in-95 duration-200 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
                 <div className="absolute -top-16 right-0 w-44 h-44 bg-purple-600/40 rounded-full blur-3xl pointer-events-none"></div>
                 <div className="absolute top-48 -left-36 w-64 h-64 bg-teal-600/30 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -126,7 +126,7 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
                         </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-4 mb-3 relative z-40">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3 relative z-40">
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Job title<span className="text-red-500">*</span>
@@ -158,7 +158,7 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4 mb-4 relative z-30">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 relative z-30">
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Work mode
@@ -211,11 +211,11 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
                     </div>
 
                     <div className="mb-6 relative z-20">
-                        <div className="flex items-center gap-3 mb-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 md:gap-3 mb-3">
                             <label className="text-base font-semibold text-gray-500 whitespace-nowrap">
                                 Required skills
                             </label>
-                            <div className="flex items-center gap-2 flex-grow max-w-sm">
+                            <div className="flex items-center gap-2 flex-grow max-w-full sm:max-w-sm">
                                 <input
                                     type="text"
                                     value={newSkill}
