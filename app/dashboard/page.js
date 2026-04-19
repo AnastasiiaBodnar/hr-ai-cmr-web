@@ -1,28 +1,45 @@
 'use client'
 
-import { useState } from 'react'
-import CandidateForm from '@/app/components/candidates/CandidateForm'
+import React, { useState } from 'react';
+import MainLayout from '@/app/components/layout/MainLayout';
+import Overview from '@/app/components/dashboard/Overview';
+import JobsOverviewTable from '@/app/components/dashboard/JobsOverviewTable';
+import TopCandidates from '@/app/components/dashboard/TopCandidates';
+import CandidateStatusChart from '@/app/components/dashboard/CandidateStatusChart';
+import CreateVacancyModal from '@/app/components/dashboard/CreateVacancyModal';
 
 export default function Dashboard() {
-  const [isModalOpen, setIsModalOpen] = useState(true) // Open by default for preview
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="p-10 flex flex-col items-center justify-center bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Dashboard Preview</h1>
-      
-      <button 
-        onClick={() => setIsModalOpen(true)}
-        className="px-6 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors"
-      >
-        Open Candidate Form
-      </button>
+    <MainLayout>
+      <div className="flex flex-col gap-4">
+        <div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-[21px]">Dashboard</h1>
+          <Overview onCreateVacancy={() => setIsModalOpen(true)} />
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 min-h-[500px]">
+          <div className="xl:col-span-2">
+            <JobsOverviewTable />
+          </div>
+          <div>
+            <TopCandidates />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
+          <div className="xl:col-span-2">
+            <CandidateStatusChart />
+          </div>
+          <div className="hidden xl:block">
+          </div>
+        </div>
+      </div>
 
       {isModalOpen && (
-        <CandidateForm 
-            isEditing={false} 
-            onClose={() => setIsModalOpen(false)} 
-        />
+        <CreateVacancyModal onClose={() => setIsModalOpen(false)} />
       )}
-    </div>
-  )
+    </MainLayout>
+  );
 }
