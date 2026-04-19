@@ -14,13 +14,47 @@ const PERIODS = [
   'Last day'
 ];
 
+const KPI_DATA = [
+  {
+    id: 'open-jobs',
+    title: 'Open jobs',
+    value: '19',
+    change: '+5.1%',
+    changeText: 'from 15 last month',
+    icon: '/images/OpenJobs.png'
+  },
+  {
+    id: 'new-candidates',
+    title: 'New candidates',
+    value: '284',
+    change: '+15%',
+    changeText: 'from 6 last month',
+    icon: '/images/NewCandidates.png'
+  },
+  {
+    id: 'interview',
+    title: 'Interview/Test',
+    value: '68',
+    change: '+3%',
+    changeText: 'from 14 last month',
+    icon: '/images/Interview.png'
+  },
+  {
+    id: 'hired',
+    title: 'Total hired',
+    value: '17',
+    change: '+2.6%',
+    changeText: 'from 6 last month',
+    icon: '/images/Hired.png'
+  }
+];
+
 const KpiCard = ({ title, value, change, changeText, icon }) => {
   const isPositive = change.startsWith('+');
 
   return (
     <div className="bg-white rounded-[10px] p-4 shadow-[0_0_2px_rgba(0,0,0,0.25)] flex-1 min-w-[240px] flex items-center justify-between min-h-[90px]">
       <div className="flex flex-col gap-2">
-
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 relative shrink-0">
             <Image src={icon} alt={title} fill sizes="35px" className="object-contain" />
@@ -69,7 +103,6 @@ const PeriodDropdown = () => {
         <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
       )}
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl border border-gray-100 py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
           {PERIODS.map((period) => (
@@ -93,7 +126,6 @@ const PeriodDropdown = () => {
   );
 };
 
-{/* Main */ }
 
 const Overview = ({ onCreateVacancy }) => {
   return (
@@ -115,34 +147,16 @@ const Overview = ({ onCreateVacancy }) => {
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <KpiCard
-          title="Open jobs"
-          value="19"
-          change="+5.1%"
-          changeText="from 15 last month"
-          icon="/images/OpenJobs.png"
-        />
-        <KpiCard
-          title="New candidates"
-          value="284"
-          change="+15%"
-          changeText="from 6 last month"
-          icon="/images/NewCandidates.png"
-        />
-        <KpiCard
-          title="Interview/Test"
-          value="68"
-          change="+3%"
-          changeText="from 14 last month"
-          icon="/images/Interview.png"
-        />
-        <KpiCard
-          title="Total hired"
-          value="17"
-          change="+2.6%"
-          changeText="from 6 last month"
-          icon="/images/Hired.png"
-        />
+        {KPI_DATA.map((kpi) => (
+          <KpiCard
+            key={kpi.id}
+            title={kpi.title}
+            value={kpi.value}
+            change={kpi.change}
+            changeText={kpi.changeText}
+            icon={kpi.icon}
+          />
+        ))}
       </div>
 
     </div>
