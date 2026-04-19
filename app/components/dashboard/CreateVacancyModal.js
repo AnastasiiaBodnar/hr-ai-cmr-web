@@ -1,25 +1,23 @@
-'use client'
-
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Input from '@/app/components/ui/Input'
 import Select from '@/app/components/ui/Select'
 import Image from 'next/image'
 import { X, Plus } from 'lucide-react'
-import { createJob } from '@/lib/jobs'
+import { createJob, updateJob } from '@/lib/jobs'
 
-export default function CreateVacancyModal({ onClose, onSuccess }) {
+export default function CreateVacancyModal({ isEditing = false, vacancyId = null, initialData = null, onClose, onSuccess }) {
     const [formData, setFormData] = useState({
-        jobTitle: '',
-        department: '',
-        location: '',
-        workMode: 'Full-time',
-        experienceLevel: 'Middle',
-        status: 'Open',
-        salaryRange: '',
-        description: '',
+        jobTitle: initialData?.title || '',
+        department: initialData?.department || '',
+        location: initialData?.location || '',
+        workMode: initialData?.workMode || 'Full-time',
+        experienceLevel: initialData?.experience || 'Middle',
+        status: initialData?.status || 'Open',
+        salaryRange: initialData?.salaryRange || '',
+        description: initialData?.description || '',
     })
 
-    const [skills, setSkills] = useState([])
+    const [skills, setSkills] = useState(initialData?.techStack || [])
     const [newSkill, setNewSkill] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -33,7 +31,7 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
     }
 
     const handleAddSkill = (e) => {
-        e.preventDefault()
+        if (e) e.preventDefault();
         if (newSkill.trim() && !skills.includes(newSkill.trim())) {
             setSkills([...skills, newSkill.trim()])
             setNewSkill('')
@@ -64,21 +62,25 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
 
         setIsLoading(true)
         try {
-            // Mapping fields to match NEW backend schema 1:1
-            const payload = { 
+            const payload = {
                 title: formData.jobTitle,
                 description: formData.description,
                 salaryRange: formData.salaryRange,
                 workMode: formData.workMode,
-                experience: formData.experienceLevel, // Renamed from experienceLevel
+                experience: formData.experienceLevel,
                 location: formData.location,
-                status: formData.status.toUpperCase(), // Backend shows "OPEN"
+                status: formData.status.toUpperCase(),
                 techStack: skills
             }
-            
-            await createJob(payload)
-            setSuccessMessage('Vacancy successfully created!')
-            
+
+            if (isEditing && vacancyId) {
+                await updateJob(vacancyId, payload)
+                setSuccessMessage('Vacancy successfully updated!')
+            } else {
+                await createJob(payload)
+                setSuccessMessage('Vacancy successfully created!')
+            }
+
             setTimeout(() => {
                 setSuccessMessage(null)
                 if (onSuccess) onSuccess();
@@ -87,7 +89,7 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
 
         } catch (err) {
             console.error('Submit error:', err)
-            setError(err.message || 'Failed to create vacancy. Please check your data.')
+            setError(err.message || 'Failed to save vacancy. Please check your data.')
         } finally {
             setIsLoading(false)
         }
@@ -95,31 +97,28 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            {/* Using the exact same structure as CandidateForm.js but with scrolling enabled for long content */}
             <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
-                {/*Decorated items in background - exactly as in CandidateForm */}
                 <div className="absolute -top-16 right-0 w-44 h-44 bg-purple-600/40 rounded-full blur-3xl pointer-events-none"></div>
                 <div className="absolute top-48 -left-36 w-64 h-64 bg-teal-600/30 rounded-full blur-3xl pointer-events-none"></div>
 
                 <form className="relative z-10" onSubmit={handleSubmit}>
-                    {/* Form header */}
                     <div className="flex items-center space-x-3 mb-3">
                         <div className="relative w-12 h-8 shrink-0">
                             <Image src="/images/logo.png" alt="HR Logo" fill sizes="48px" className="object-contain" />
                         </div>
                         <h2 className="text-xl font-bold text-black">
-                            Create job vacancy
+                            {isEditing ? 'Edit job vacancy' : 'Create job vacancy'}
                         </h2>
                     </div>
 
                     {error && (
-                        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg relative z-20">
+                        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg relative z-20 font-medium">
                             {error}
                         </div>
                     )}
 
                     {successMessage && (
-                        <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg relative z-20 flex items-center space-x-2">
+                        <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg relative z-20 flex items-center space-x-2 font-medium">
                             <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
@@ -127,14 +126,13 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
                         </div>
                     )}
 
-                    {/* Main field grid (2 columns) - matching CandidateForm pattern */}
                     <div className="grid grid-cols-2 gap-4 mb-3 relative z-40">
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
                                 Job title<span className="text-red-500">*</span>
                             </label>
                             <Input name="jobTitle" value={formData.jobTitle} onChange={handleChange} required error={!!fieldErrors.jobTitle} className="!py-2 text-sm" />
-                            {fieldErrors.jobTitle && <p className="text-red-500 text-xs mt-1">{fieldErrors.jobTitle}</p>}
+                            {fieldErrors.jobTitle && <p className="text-red-500 text-xs mt-1 font-medium">{fieldErrors.jobTitle}</p>}
                         </div>
 
                         <div>
@@ -142,7 +140,7 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
                                 Department<span className="text-red-500">*</span>
                             </label>
                             <Input name="department" value={formData.department} onChange={handleChange} required error={!!fieldErrors.department} className="!py-2 text-sm" />
-                            {fieldErrors.department && <p className="text-red-500 text-xs mt-1">{fieldErrors.department}</p>}
+                            {fieldErrors.department && <p className="text-red-500 text-xs mt-1 font-medium">{fieldErrors.department}</p>}
                         </div>
 
                         <div>
@@ -160,7 +158,6 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
                         </div>
                     </div>
 
-                    {/* Middle grid (3 columns) - matching CandidateForm pattern */}
                     <div className="grid grid-cols-3 gap-4 mb-4 relative z-30">
                         <div>
                             <label className="block text-base font-semibold text-gray-500 mb-1.5">
@@ -213,7 +210,6 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
                         </div>
                     </div>
 
-                    {/* Required skills (Following the provided design image) */}
                     <div className="mb-6 relative z-20">
                         <div className="flex items-center gap-3 mb-3">
                             <label className="text-base font-semibold text-gray-500 whitespace-nowrap">
@@ -249,7 +245,6 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
                         </div>
                     </div>
 
-                    {/* Job description (Following the provided design image) */}
                     <div className="mb-4 relative z-10">
                         <label className="block text-base font-semibold text-gray-500 mb-2">
                             Job description<span className="text-red-500">*</span>
@@ -262,10 +257,9 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
                             className={`w-full p-6 bg-white border ${fieldErrors.description ? 'border-red-500' : 'border-gray-200'} rounded-[20px] text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent resize-none h-[80px] shadow-sm`}
                             placeholder=""
                         ></textarea>
-                        {fieldErrors.description && <p className="text-red-500 text-xs mt-1">{fieldErrors.description}</p>}
+                        {fieldErrors.description && <p className="text-red-500 text-xs mt-1 font-medium">{fieldErrors.description}</p>}
                     </div>
 
-                    {/* Buttons - exact same as CandidateForm */}
                     <div className="flex items-center justify-end space-x-3 relative z-10">
                         <button
                             type="button"
@@ -286,7 +280,7 @@ export default function CreateVacancyModal({ onClose, onSuccess }) {
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             ) : null}
-                            Add vacancy
+                            {isEditing ? 'Save changes' : 'Add vacancy'}
                         </button>
                     </div>
                 </form>
