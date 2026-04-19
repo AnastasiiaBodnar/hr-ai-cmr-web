@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import MainLayout from '@/app/components/layout/MainLayout';
 import Overview from '@/app/components/dashboard/Overview';
 import JobsOverviewTable from '@/app/components/dashboard/JobsOverviewTable';
+import CandidatesFunnel from '@/app/components/dashboard/CandidatesFunnel';
 import TopCandidates from '@/app/components/dashboard/TopCandidates';
 import CandidateStatusChart from '@/app/components/dashboard/CandidateStatusChart';
 import CreateVacancyModal from '@/app/components/dashboard/CreateVacancyModal';
@@ -19,26 +20,29 @@ export default function Dashboard() {
 
   return (
     <MainLayout>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 max-w-[1600px]">
         <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-[21px]">Dashboard</h1>
           <Overview onCreateVacancy={() => setIsModalOpen(true)} />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 min-h-[500px]">
-          <div className="xl:col-span-2">
-            <JobsOverviewTable key={refreshKey} />
+        {/* Middle Row: Funnel and Top Candidates */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <div className="xl:col-span-2 h-[420px]">
+            <CandidatesFunnel />
           </div>
-          <div>
+          <div className="h-[420px]">
             <TopCandidates />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
-          <div className="xl:col-span-2">
+        {/* Bottom Row: Status Chart and Jobs Overview */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+          <div className="h-[360px]">
             <CandidateStatusChart />
           </div>
-          <div className="hidden xl:block">
+          <div className="h-[360px]">
+            <JobsOverviewTable key={refreshKey} />
           </div>
         </div>
       </div>
