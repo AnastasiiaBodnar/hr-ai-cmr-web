@@ -25,7 +25,7 @@ const KpiCard = ({ title, value, change, changeText, icon }) => {
           <div className="w-8 h-8 relative shrink-0">
             <Image src={icon} alt={title} fill sizes="35px" className="object-contain" />
           </div>
-          <h3 className="text-gray-500 font-medium text-sm">{title}</h3>
+          <h3 className="text-black font-medium text-lg">{title}</h3>
         </div>
 
         <div className="flex items-center gap-1.5">

@@ -26,7 +26,7 @@ const MainLayout = ({ children }) => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-12 scroll-smooth">
+        <main className="flex-1 overflow-y-auto px-12 pt-6 pb-12 scroll-smooth">
           {children}
         </main>
       </div>
