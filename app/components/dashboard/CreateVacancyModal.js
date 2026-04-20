@@ -12,7 +12,7 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
         location: initialData?.location || '',
         workMode: initialData?.workMode || 'Full-time',
         experienceLevel: initialData?.experience || 'Middle',
-        status: initialData?.status || 'Open',
+        status: initialData?.status || 'OPEN',
         salaryRange: initialData?.salaryRange || '',
         description: initialData?.description || '',
     })
@@ -202,9 +202,9 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
                                 value={formData.status}
                                 onChange={handleChange}
                                 options={[
-                                    { value: 'Open', label: 'Open' },
-                                    { value: 'Closed', label: 'Closed' },
-                                    { value: 'Pause', label: 'Pause' },
+                                    { value: 'OPEN', label: 'Open' },
+                                    { value: 'CLOSED', label: 'Closed' },
+                                    { value: 'PAUSE', label: 'Pause' },
                                 ]}
                             />
                         </div>
