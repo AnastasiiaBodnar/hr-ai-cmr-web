@@ -23,6 +23,7 @@ export default function CandidatesBoard({
                                             onSelectCandidate,
                                             onDeleteCandidate,
                                             onMoveCandidate,
+                                            onAddCandidate,
                                             pendingCandidateIds,
                                             isPanelOpen,
                                             viewMode,
@@ -140,7 +141,11 @@ export default function CandidatesBoard({
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <button className="h-[28px] rounded-[4px] bg-primary px-4 text-[13px] font-normal text-white">
+                    <button
+                        type="button"
+                        onClick={onAddCandidate}
+                        className="h-[28px] rounded-[4px] bg-primary px-4 text-[13px] font-normal text-white"
+                    >
                         Add candidates +
                     </button>
 
@@ -214,7 +219,6 @@ export default function CandidatesBoard({
                                                     candidates={items}
                                                     selectedCandidateId={selectedCandidateId}
                                                     onSelectCandidate={onSelectCandidate}
-                                                    isPanelOpen={isPanelOpen}
                                                     compactMode={isPanelOpen}
                                                     pendingCandidateIds={pendingCandidateIds}
                                                 />
@@ -246,7 +250,6 @@ export default function CandidatesBoard({
                                                         onSelectCandidate={onSelectCandidate}
                                                         compact
                                                         wide
-                                                        isPanelOpen={isPanelOpen}
                                                         compactMode={isPanelOpen}
                                                         pendingCandidateIds={pendingCandidateIds}
                                                     />
@@ -277,7 +280,6 @@ export default function CandidatesBoard({
                                                 candidates={items}
                                                 selectedCandidateId={selectedCandidateId}
                                                 onSelectCandidate={onSelectCandidate}
-                                                isPanelOpen={isPanelOpen}
                                                 fluid
                                                 compactMode={isPanelOpen}
                                                 pendingCandidateIds={pendingCandidateIds}
@@ -308,7 +310,6 @@ export default function CandidatesBoard({
                                                     onSelectCandidate={onSelectCandidate}
                                                     compact
                                                     wide
-                                                    isPanelOpen={isPanelOpen}
                                                     fluid
                                                     compactMode={isPanelOpen}
                                                     pendingCandidateIds={pendingCandidateIds}
