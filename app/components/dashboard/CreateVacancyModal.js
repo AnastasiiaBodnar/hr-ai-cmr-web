@@ -12,7 +12,7 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
         location: initialData?.location || '',
         workMode: initialData?.workMode || 'Full-time',
         experienceLevel: initialData?.experience || 'Middle',
-        status: initialData?.status || 'Open',
+        status: initialData?.status || 'OPEN',
         salaryRange: initialData?.salaryRange || '',
         description: initialData?.description || '',
     })
@@ -64,6 +64,7 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
         try {
             const payload = {
                 title: formData.jobTitle,
+                department: formData.department,
                 description: formData.description,
                 salaryRange: formData.salaryRange,
                 workMode: formData.workMode,
@@ -202,9 +203,9 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
                                 value={formData.status}
                                 onChange={handleChange}
                                 options={[
-                                    { value: 'Open', label: 'Open' },
-                                    { value: 'Closed', label: 'Closed' },
-                                    { value: 'Pause', label: 'Pause' },
+                                    { value: 'OPEN', label: 'Open' },
+                                    { value: 'CLOSED', label: 'Closed' },
+                                    { value: 'PAUSED', label: 'Pause' },
                                 ]}
                             />
                         </div>
@@ -220,25 +221,25 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
                                     type="text"
                                     value={newSkill}
                                     onChange={(e) => setNewSkill(e.target.value)}
-                                    className="flex-grow h-10 px-4 bg-white border border-gray-300 rounded-xl text-sm outline-none focus:border-accent"
+                                    className="w-[123px] h-[23px] px-2 bg-[#F8FAFC] border border-[#B0B0B0] border-[0.8px] rounded-[5px] text-xs outline-none focus:border-accent"
                                     onKeyPress={(e) => e.key === 'Enter' && handleAddSkill(e)}
                                 />
                                 <button
                                     type="button"
                                     onClick={handleAddSkill}
-                                    className="h-10 px-4 bg-accent/10 border border-accent text-accent rounded-xl text-sm font-bold hover:bg-accent hover:text-white transition-all flex items-center justify-center gap-1"
+                                    className="h-[27px] w-[63px] bg-accent/10 border-[0.8px] border-accent text-accent rounded-[5px] text-[16px] font-normal hover:bg-accent hover:text-white transition-all flex items-center justify-center gap-1"
                                 >
                                     + Add
                                 </button>
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-2">
                             {skills.map(skill => (
-                                <div key={skill} className="flex items-center gap-2 px-6 py-2 border border-accent rounded-xl text-accent font-medium bg-white text-sm">
+                                <div key={skill} className="flex items-center gap-2 px-3 py-1 border border-accent rounded-[5px] text-accent font-medium bg-white text-xs">
                                     {skill}
                                     <button type="button" onClick={() => removeSkill(skill)} className="hover:text-red-500 opacity-50 hover:opacity-100 transition-opacity">
-                                        <X size={14} />
+                                        <X size={12} />
                                     </button>
                                 </div>
                             ))}
@@ -254,7 +255,7 @@ export default function CreateVacancyModal({ isEditing = false, vacancyId = null
                             value={formData.description}
                             onChange={handleChange}
                             rows="4"
-                            className={`w-full p-6 bg-white border ${fieldErrors.description ? 'border-red-500' : 'border-gray-200'} rounded-[20px] text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent resize-none h-[80px] shadow-sm`}
+                            className={`w-full p-6 bg-[#F8FAFC] border-[0.8px] ${fieldErrors.description ? 'border-red-500' : 'border-[#B0B0B0]'} rounded-[20px] text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent resize-none h-[80px] shadow-sm`}
                             placeholder=""
                         ></textarea>
                         {fieldErrors.description && <p className="text-red-500 text-xs mt-1 font-medium">{fieldErrors.description}</p>}
