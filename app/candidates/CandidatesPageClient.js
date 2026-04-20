@@ -301,10 +301,10 @@ export default function CandidatesPageClient() {
     };
 
     return (
-        <div className="flex h-screen overflow-hidden bg-background">
+        <div className="h-screen overflow-hidden bg-background">
             <AppSidebar />
 
-            <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+            <div className="ml-[103px] flex h-screen min-w-0 flex-col overflow-hidden">
                 <AppTopbar
                     searchValue={searchInput}
                     onSearchChange={setSearchInput}
