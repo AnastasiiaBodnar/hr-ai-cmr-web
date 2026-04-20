@@ -7,7 +7,8 @@ const FUNNEL_STAGES = [
   { label: 'Screening', percentage: '86%', count: '244', color: '#A9D1FF' },
   { label: 'Interview/Test', percentage: '73%', count: '207', color: '#8AB4F8' },
   { label: 'Offer', percentage: '41%', count: '116', color: '#A1C2FA' },
-  { label: 'Hired', percentage: '16%', count: '45', color: '#7DD3C1' }
+  { label: 'Hired', percentage: '16%', count: '45', color: '#7DD3C1' },
+  { label: 'Rejected', percentage: '25%', count: '71', color: '#FF6E8D' }
 ];
 
 const RoundedTrapezoid = ({ topWidth, bottomWidth, height, color, label, percentage, yOffset }) => {
@@ -61,8 +62,8 @@ const RoundedTrapezoid = ({ topWidth, bottomWidth, height, color, label, percent
 };
 
 const CandidatesFunnel = () => {
-  const segmentHeight = 44;
-  const gap = 10;
+  const segmentHeight = 40;
+  const gap = 8;
 
   return (
     <div className="bg-white rounded-[10px] shadow-[0_0_2px_rgba(0,0,0,0.25)] p-4 md:p-6 h-full flex flex-col min-w-0">
@@ -71,7 +72,7 @@ const CandidatesFunnel = () => {
       <div className="flex-1 flex items-center justify-center overflow-hidden">
         <svg
           viewBox="0 0 500 280"
-          className="w-full h-auto max-w-[550px] drop-shadow-sm"
+          className="w-full h-auto max-w-[550px]"
           preserveAspectRatio="xMidYMid meet"
         >
           {FUNNEL_STAGES.map((stage, i) => {

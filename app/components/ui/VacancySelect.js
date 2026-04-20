@@ -21,11 +21,11 @@ export default function VacancySelect({ options, value, onChange, name, placehol
     return (
         <div className="relative w-full" ref={containerRef}>
             <div
-                className={`w-[181px] h-[28px] px-3 border-[#B0B0B0] border-[0.8px] rounded-[5px] text-[16px] bg-[#F8FAFC] cursor-pointer flex items-center justify-between transition-colors ${isOpen ? '' : 'hover:border-gray-400'
+                className={`w-[181px] h-[34px] px-3 border-[#B0B0B0] border-[0.8px] rounded-[10px] text-[14px] bg-[#F8FAFC] cursor-pointer flex items-center justify-between transition-colors font-roboto font-normal ${isOpen ? 'border-accent' : 'hover:border-gray-400'
                     }`}
                 onClick={() => setIsOpen(!isOpen)}
             >
-                <span className="text-[#898989] font-regular">
+                <span className="text-[#898989]">
                     {selectedOption ? selectedOption.label : placeholder}
                 </span>
                 <svg
@@ -45,9 +45,9 @@ export default function VacancySelect({ options, value, onChange, name, placehol
                         return (
                             <div
                                 key={option.value}
-                                className={`px-3 py-1.5 text-[12px] cursor-pointer transition-colors flex items-center justify-between ${isSelected
-                                    ? 'bg-[#0B8B9538] text-accent font-normal'
-                                    : 'text-[#898989] hover:bg-gray-50 hover:text-accent'
+                                className={`px-3 h-[28px] text-[14px] font-normal font-roboto cursor-pointer transition-colors flex items-center ${isSelected
+                                    ? 'bg-[#0B8B952E] text-accent'
+                                    : 'text-[#898989] hover:bg-gray-50'
                                     }`}
                                 onClick={() => {
                                     onChange({ target: { name, value: option.value } })

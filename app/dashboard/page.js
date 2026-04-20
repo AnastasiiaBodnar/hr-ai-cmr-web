@@ -6,7 +6,6 @@ import Overview from '@/app/components/dashboard/Overview';
 import JobsOverviewTable from '@/app/components/dashboard/JobsOverviewTable';
 import CandidatesFunnel from '@/app/components/dashboard/CandidatesFunnel';
 import TopCandidates from '@/app/components/dashboard/TopCandidates';
-import CandidateStatusChart from '@/app/components/dashboard/CandidateStatusChart';
 import CreateVacancyModal from '@/app/components/dashboard/CreateVacancyModal';
 
 export default function Dashboard() {
@@ -37,11 +36,8 @@ export default function Dashboard() {
         </div>
 
         {/* Bottom Row: Status Chart and Jobs Overview */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
-          <div className="min-h-[300px] xl:h-[360px]">
-            <CandidateStatusChart />
-          </div>
-          <div className="min-h-[300px] xl:h-[360px]">
+        <div className="mb-4">
+          <div className="min-h-[300px]">
             <JobsOverviewTable key={refreshKey} />
           </div>
         </div>
