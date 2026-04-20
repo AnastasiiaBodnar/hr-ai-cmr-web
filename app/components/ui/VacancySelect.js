@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 
-export default function Select({ options, value, onChange, name, placeholder = 'Select an option', className = '' }) {
+export default function VacancySelect({ options, value, onChange, name, placeholder = 'Select an option' }) {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef(null)
 
@@ -19,17 +19,17 @@ export default function Select({ options, value, onChange, name, placeholder = '
     const selectedOption = options.find(opt => opt.value === value)
 
     return (
-        <div className={`relative w-full ${className}`} ref={containerRef}>
+        <div className="relative w-full" ref={containerRef}>
             <div
-                className={`w-full px-4 py-2.5 border-[0.8px] rounded-lg text-sm bg-[#F8FAFC] cursor-pointer flex items-center justify-between transition-colors ${isOpen ? 'border-teal-500 ring-1 ring-teal-500' : 'border-[#B0B0B0] hover:border-gray-400'
+                className={`w-[181px] h-[28px] px-3 border-[#B0B0B0] border-[0.8px] rounded-[5px] text-[16px] bg-[#F8FAFC] cursor-pointer flex items-center justify-between transition-colors ${isOpen ? '' : 'hover:border-gray-400'
                     }`}
                 onClick={() => setIsOpen(!isOpen)}
             >
-                <span className="text-[#898989]">
+                <span className="text-[#898989] font-regular">
                     {selectedOption ? selectedOption.label : placeholder}
                 </span>
                 <svg
-                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'transform rotate-180 text-teal-500' : ''}`}
+                    className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${isOpen ? 'transform rotate-180 text-accent' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -39,15 +39,15 @@ export default function Select({ options, value, onChange, name, placeholder = '
             </div>
 
             {isOpen && (
-                <div className="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-xl py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute z-50 w-full mt-1.5 bg-white border border-gray-100 rounded-[10px] shadow-xl py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                     {options.map((option) => {
                         const isSelected = option.value === value;
                         return (
                             <div
                                 key={option.value}
-                                className={`px-4 py-1.5 text-[12px] cursor-pointer transition-colors flex items-center justify-between ${isSelected
-                                        ? 'bg-[#0B8B9538] text-accent font-normal'
-                                        : 'text-[#898989] hover:bg-gray-50 hover:text-accent'
+                                className={`px-3 py-1.5 text-[12px] cursor-pointer transition-colors flex items-center justify-between ${isSelected
+                                    ? 'bg-[#0B8B9538] text-accent font-normal'
+                                    : 'text-[#898989] hover:bg-gray-50 hover:text-accent'
                                     }`}
                                 onClick={() => {
                                     onChange({ target: { name, value: option.value } })

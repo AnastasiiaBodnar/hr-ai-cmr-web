@@ -1,12 +1,17 @@
 'use client'
 
 import React from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
 
 const STATUS_COLORS = {
-    'OPEN': 'bg-green-100 text-green-700',
-    'CLOSED': 'bg-red-100 text-red-700',
-    'PAUSE': 'bg-orange-100 text-orange-700'
+    'OPEN': 'bg-[#BFFFCD] text-[#10B981]',
+    'CLOSED': 'bg-[#FFB2B2] text-[#E11D48]',
+    'PAUSED': 'bg-[#FFE3BF] text-[#F59E0B]'
+};
+
+const STATUS_LABELS = {
+    'OPEN': 'Open',
+    'CLOSED': 'Close',
+    'PAUSED': 'Pause'
 };
 
 const VacancyTable = ({ jobs, onEdit, onDelete, isLoading }) => {
@@ -28,54 +33,54 @@ const VacancyTable = ({ jobs, onEdit, onDelete, isLoading }) => {
     }
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[800px]">
+        <div className="border-x border-b border-gray-100 bg-[#F8FAFC] shadow-[0_0_2px_0_rgba(0,0,0,0.25)]">
+            <div className="overflow-x-auto overflow-y-auto px-[10px] max-h-[calc(100vh-280px)]">
+                <table className="w-full text-left border-separate border-spacing-y-[1px] min-w-[800px]">
                     <thead>
-                        <tr className="bg-gray-50/50 border-b border-gray-100">
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-500">Job</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-500">Work mode</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-500">Level</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-500">Salary</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-500">Status</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-500 text-right">Actions</th>
+                        <tr className="bg-white group relative after:content-[''] after:absolute after:inset-0 after:shadow-[0_0_2px_0_rgba(0,0,0,0.25)] after:rounded-t-[8px] after:pointer-events-none">
+                            <th className="px-6 h-[38px] text-[16px] font-normal text-[#7D7D7D] first:rounded-tl-[8px] bg-white">Job</th>
+                            <th className="px-6 h-[38px] text-[16px] font-normal text-[#7D7D7D] bg-white">Work mode</th>
+                            <th className="px-6 h-[38px] text-[16px] font-normal text-[#7D7D7D] bg-white">Level</th>
+                            <th className="px-6 h-[38px] text-[16px] font-normal text-[#7D7D7D] bg-white">Salary</th>
+                            <th className="px-6 h-[38px] text-[16px] font-normal text-[#7D7D7D] bg-white">Status</th>
+                            <th className="px-6 h-[38px] text-[16px] font-normal text-[#7D7D7D] text-right last:rounded-tr-[8px] bg-white">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody>
                         {jobs.map((job) => (
-                            <tr key={job._id || job.id} className="hover:bg-gray-50/30 transition-colors group">
-                                <td className="px-6 py-4">
-                                    <span className="font-bold text-gray-900 block">{job.title || 'Untitled'}</span>
+                            <tr key={job._id || job.id} className="bg-white hover:bg-gray-50/50 transition-colors group shadow-[0_0_2px_0_rgba(0,0,0,0.25)] gap-40">
+                                <td className="px-6 h-[50px]">
+                                    <span className="font-semibold text-black block text-[20px]">{job.title || 'Untitled'}</span>
                                 </td>
-                                <td className="px-6 py-4 text-sm text-gray-600">
-                                    {job.workMode || 'N/A'}
+                                <td className="px-6 h-[50px] text-[18px] text-black font-normal">
+                                    {job.workMode || '-'}
                                 </td>
-                                <td className="px-6 py-4 text-sm text-gray-600">
-                                    {job.experience || 'N/A'}
+                                <td className="px-6 h-[50px] text-[18px] text-black font-normal">
+                                    {job.experience || '-'}
                                 </td>
-                                <td className="px-6 py-4 text-sm text-gray-600">
-                                    {job.salaryRange || 'N/A'}
+                                <td className="px-6 h-[50px] text-[18px] text-black font-normal">
+                                    {job.salaryRange || '-'}
                                 </td>
-                                <td className="px-6 py-4">
-                                    <span className={`px-3 py-1 rounded-full text-[12px] font-bold uppercase tracking-wider ${STATUS_COLORS[job.status?.toUpperCase()] || 'bg-gray-100 text-gray-600'}`}>
-                                        {job.status?.toLowerCase() || 'unknown'}
+                                <td className="px-6 h-[50px]">
+                                    <span className={`inline-flex items-center justify-center w-[83px] h-[28px] rounded-[6px] text-xs font-medium ${STATUS_COLORS[job.status?.toUpperCase()] || 'bg-gray-100 text-gray-600'}`}>
+                                        {STATUS_LABELS[job.status?.toUpperCase()] || job.status || 'unknown'}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-right">
+                                <td className="px-6 h-[50px] text-right">
                                     <div className="flex items-center justify-end gap-2">
-                                        <button 
+                                        <button
                                             onClick={() => onEdit(job)}
-                                            className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
+                                            className="p-2 text-gray-400 cursor-pointer"
                                             title="Edit vacancy"
                                         >
-                                            <Pencil size={18} />
+                                            <img src="/images/pen.png" alt="Edit" className="w-4 h-4 object-contain" />
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => onDelete(job._id || job.id)}
-                                            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                            className="p-2 text-gray-400 cursor-pointer"
                                             title="Delete vacancy"
                                         >
-                                            <Trash2 size={18} />
+                                            <img src="/images/delete.png" alt="Delete" className="w-4 h-4 object-contain" />
                                         </button>
                                     </div>
                                 </td>

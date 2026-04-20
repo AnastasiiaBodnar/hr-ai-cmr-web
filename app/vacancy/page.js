@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import MainLayout from '@/app/components/layout/MainLayout';
-import Select from '@/app/components/ui/Select';
-import Input from '@/app/components/ui/Input';
+import VacancySelect from '@/app/components/ui/VacancySelect';
+import VacancyButton from '@/app/components/ui/VacancyButton';
 import VacancyTable from '@/app/components/vacancy/VacancyTable';
 import CreateVacancyModal from '@/app/components/dashboard/CreateVacancyModal';
 import DeleteVacancyModal from '@/app/components/vacancy/DeleteVacancyModal';
 import { getJobs, deleteJob } from '@/lib/jobs';
-import { Search, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 const PERIOD_OPTIONS = [
     { value: 'all', label: 'All time' },
@@ -28,7 +28,7 @@ const STATUS_OPTIONS = [
     { value: 'all', label: 'All status' },
     { value: 'OPEN', label: 'Open' },
     { value: 'CLOSED', label: 'Closed' },
-    { value: 'PAUSE', label: 'Pause' },
+    { value: 'PAUSED', label: 'Pause' },
 ];
 
 export default function VacancyPage() {
@@ -60,6 +60,17 @@ export default function VacancyPage() {
 
     useEffect(() => {
         fetchJobs();
+
+        const mainElement = document.querySelector('main');
+        if (mainElement) {
+            mainElement.style.overflow = 'hidden';
+        }
+
+        return () => {
+            if (mainElement) {
+                mainElement.style.overflow = '';
+            }
+        };
     }, []);
 
     const handleFilterChange = (e) => {
@@ -88,7 +99,8 @@ export default function VacancyPage() {
                 (job.department || '').toLowerCase().includes(searchQuery.toLowerCase());
 
             const matchesWorkMode = filters.workMode === 'all' || job.workMode === filters.workMode;
-            const matchesStatus = filters.status === 'all' || job.status?.toUpperCase() === filters.status.toUpperCase();
+            const matchesStatus = filters.status === 'all' ||
+                (filters.status === 'PAUSED' ? (job.status?.toUpperCase() === 'PAUSE' || job.status?.toUpperCase() === 'PAUSED') : job.status?.toUpperCase() === filters.status.toUpperCase());
 
             return matchesSearch && matchesWorkMode && matchesStatus;
         });
@@ -96,62 +108,56 @@ export default function VacancyPage() {
 
     return (
         <MainLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
-            <div className="max-w-[1600px] mx-auto px-4 md:px-0 flex flex-col gap-6">
-                {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <h1 className="text-3xl font-bold text-gray-900">Vacancies</h1>
+            <div className="flex flex-col gap-4 max-w-[1600px] mx-auto px-4 md:px-0">
+                <div className="px-1 min-[400px]:px-0">
+                    <h1 className="text-2xl md:text-4xl font-bold text-gray-900 ">Vacancies</h1>
+                </div>
 
-                    <button
-                        onClick={() => {
-                            setEditingVacancy(null);
+                <div className="flex flex-col">
+                    {/* Filters Section */}
+                    <div className="bg-white px-6 h-[68px] rounded-t-[10px] border-x border-t border-gray-100 flex items-center justify-between shadow-sm">
+                        <div className="flex gap-3">
+                            <VacancySelect
+                                name="workMode"
+                                value={filters.workMode}
+                                onChange={handleFilterChange}
+                                options={WORK_MODE_OPTIONS}
+                            />
+                            <VacancySelect
+                                name="status"
+                                value={filters.status}
+                                onChange={handleFilterChange}
+                                options={STATUS_OPTIONS}
+                            />
+                        </div>
+                        <VacancyButton
+                            onClick={() => {
+                                setEditingVacancy(null);
+                                setIsCreateModalOpen(true);
+                            }}
+                        >
+                            Create vacancy +
+                        </VacancyButton>
+                    </div>
+
+                    {/* Stats Summary Strip */}
+                    <div className="bg-[#F8FAFC] h-[35px] px-6 flex items-center border-x border-gray-100 shadow-[0_0_2px_0_rgba(0,0,0,0.25)] relative z-10">
+                        <div className="text-[14px] text-[#7E7E7E] font-normal">
+                            Total jobs: <span className="text-[#7E7E7E]">{filteredJobs.length}</span>
+                        </div>
+                    </div>
+
+                    {/* Table Section */}
+                    <VacancyTable
+                        jobs={filteredJobs}
+                        isLoading={isLoading}
+                        onEdit={(job) => {
+                            setEditingVacancy(job);
                             setIsCreateModalOpen(true);
                         }}
-                        className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20"
-                    >
-                        <Plus size={20} />
-                        Create vacancy +
-                    </button>
+                        onDelete={(id) => setDeletingVacancyId(id)}
+                    />
                 </div>
-
-                {/* Filters Section */}
-                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col lg:flex-row items-center justify-end gap-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto min-w-[500px]">
-                        <Select
-                            name="period"
-                            value={filters.period}
-                            onChange={handleFilterChange}
-                            options={PERIOD_OPTIONS}
-                        />
-                        <Select
-                            name="workMode"
-                            value={filters.workMode}
-                            onChange={handleFilterChange}
-                            options={WORK_MODE_OPTIONS}
-                        />
-                        <Select
-                            name="status"
-                            value={filters.status}
-                            onChange={handleFilterChange}
-                            options={STATUS_OPTIONS}
-                        />
-                    </div>
-                </div>
-
-                {/* Stats Summary */}
-                <div className="text-sm text-gray-500 font-medium">
-                    Total jobs: <span className="text-primary">{filteredJobs.length}</span>
-                </div>
-
-                {/* Table Section */}
-                <VacancyTable
-                    jobs={filteredJobs}
-                    isLoading={isLoading}
-                    onEdit={(job) => {
-                        setEditingVacancy(job);
-                        setIsCreateModalOpen(true);
-                    }}
-                    onDelete={(id) => setDeletingVacancyId(id)}
-                />
             </div>
 
             {/* Modals */}
