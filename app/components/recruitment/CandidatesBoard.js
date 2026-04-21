@@ -22,6 +22,7 @@ export default function CandidatesBoard({
                                             selectedCandidateId,
                                             onSelectCandidate,
                                             onDeleteCandidate,
+                                            onEditCandidate,
                                             onMoveCandidate,
                                             onAddCandidate,
                                             pendingCandidateIds,
@@ -186,6 +187,7 @@ export default function CandidatesBoard({
                         candidates={candidates}
                         onSelectCandidate={onSelectCandidate}
                         onDeleteCandidate={onDeleteCandidate}
+                        onEditCandidate={onEditCandidate}
                     />
                 ) : !isMounted ? (
                     <div className="flex h-full items-center justify-center rounded-[16px] bg-[#EAEAEAA3] text-black/40">

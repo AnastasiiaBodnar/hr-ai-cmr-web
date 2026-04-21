@@ -29,22 +29,29 @@ function SkillTag({ children, className = "" }) {
     );
 }
 
-function InfoRow({ icon, alt, children, isLink = false }) {
+function InfoRow({ icon, alt, children, href }) {
+    const content = href ? (
+        <a
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className="truncate text-[12px] text-[#2D64D8] underline-offset-2 hover:underline"
+        >
+            {children}
+        </a>
+    ) : (
+        <span className="truncate">{children}</span>
+    );
+
     return (
         <div className="flex items-center gap-2 text-[12px] text-black/65">
             <Image src={icon} alt={alt} width={12} height={12} />
-            {isLink ? (
-                <a href="#" className="text-[12px] text-[#2D64D8] underline-offset-2 hover:underline">
-                    {children}
-                </a>
-            ) : (
-                <span>{children}</span>
-            )}
+            <div className="min-w-0 flex-1">{content}</div>
         </div>
     );
 }
 
-function ResumeRow({ icon, alt, fileName }) {
+function ResumeRow({ icon, alt, fileName, fileUrl }) {
     return (
         <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
@@ -53,26 +60,111 @@ function ResumeRow({ icon, alt, fileName }) {
             </div>
 
             <div className="flex items-center gap-1">
-                <button
-                    type="button"
+                <a
+                    href={fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
                     className="flex h-[18px] min-w-[44px] items-center justify-center rounded-[4px] border border-primary px-2 text-[11px] text-primary"
                 >
                     Open
-                </button>
-                <button
-                    type="button"
+                </a>
+                <a
+                    href={fileUrl}
+                    download
                     className="flex h-[18px] w-[18px] items-center justify-center rounded-[4px] bg-primary"
                 >
                     <Image src="/icons/arrow2.png" alt="Download" width={10} height={10} />
-                </button>
+                </a>
             </div>
         </div>
     );
 }
 
+function getStatusLabel(status) {
+    switch (status) {
+        case "NEW":
+            return "New";
+        case "SCREENING":
+            return "Screening";
+        case "INTERVIEW":
+            return "Interview";
+        case "TEST_TASK":
+            return "Test task";
+        case "OFFER":
+            return "Offer";
+        case "HIRED":
+            return "Hired";
+        case "REJECTED":
+            return "Rejected";
+        default:
+            return status || "Unknown";
+    }
+}
+
+function getStatusChipClass(status) {
+    switch (status) {
+        case "NEW":
+            return "bg-[#D9E5FB] text-[#2D4F9E]";
+        case "SCREENING":
+            return "bg-[#B6E8C8] text-[#208F55]";
+        case "INTERVIEW":
+        case "TEST_TASK":
+            return "bg-[#F3DEB2] text-[#9A6A12]";
+        case "OFFER":
+            return "bg-[#B6E8C8] text-[#208F55]";
+        case "HIRED":
+            return "bg-[#B6E8C8] text-[#208F55]";
+        case "REJECTED":
+            return "bg-[#F0C3C6] text-[#B24552]";
+        default:
+            return "bg-[#EAEAEA] text-black/60";
+    }
+}
+
+function getInsightStatusText(status) {
+    switch (status) {
+        case "NEW":
+            return "Status: New";
+        case "SCREENING":
+            return "Status: Screening";
+        case "INTERVIEW":
+            return "Status: Interview";
+        case "TEST_TASK":
+            return "Status: Test task";
+        case "OFFER":
+            return "Status: Offer";
+        case "HIRED":
+            return "Status: Hired";
+        case "REJECTED":
+            return "Status: Rejected";
+        default:
+            return "Status: Proceed";
+    }
+}
+
+function getStrongSkills(candidate) {
+    if (Array.isArray(candidate.strongSkills) && candidate.strongSkills.length) {
+        return candidate.strongSkills;
+    }
+
+    if (Array.isArray(candidate.skills) && candidate.skills.length) {
+        return candidate.skills;
+    }
+
+    return [];
+}
+
+function getMissingSkills(candidate) {
+    if (Array.isArray(candidate.missingSkills) && candidate.missingSkills.length) {
+        return candidate.missingSkills;
+    }
+
+    return [];
+}
+
 function InsightTab({ candidate }) {
-    const strongSkills = candidate.strongSkills || ["React", "node.js", "mongodb", "Docker"];
-    const missingSkills = candidate.missingSkills || ["PostgreSQL"];
+    const strongSkills = getStrongSkills(candidate);
+    const missingSkills = getMissingSkills(candidate);
 
     return (
         <div className="px-[10px] pt-[10px]">
@@ -96,14 +188,14 @@ function InsightTab({ candidate }) {
 
             <div className="mb-3 rounded-[12px] bg-[#F7F7F8] px-[10px] py-[12px]">
                 <div className="mb-3 text-right text-[10px] text-black/35">
-                    Analyze Date: {candidate.analyzeDate || "Jan 15, 2026"}
+                    Analyze Date: {candidate.analyzeDate || "—"}
                 </div>
 
                 <div className="flex items-center gap-3">
                     <div className="flex h-[72px] w-[72px] shrink-0 aspect-square items-center justify-center rounded-full border-[6px] border-[#20B77A]">
                         <div className="text-center leading-tight">
                             <div className="text-[15px] font-bold text-[#20B77A]">
-                                {candidate.matchPercent}%
+                                {candidate.matchPercent ?? 95}%
                             </div>
                             <div className="caption-text text-[10px] text-[#20B77A]">match</div>
                         </div>
@@ -111,12 +203,14 @@ function InsightTab({ candidate }) {
 
                     <div className="min-w-0">
                         <p className="text-[14px] font-semibold leading-tight text-black">
-                            {candidate.level ? `${candidate.level} ${candidate.position}` : candidate.position}
+                            {candidate.level
+                                ? `${candidate.level} ${candidate.position}`
+                                : candidate.position}
                         </p>
 
                         <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#19B97A] px-3 py-[3px] text-[11px] text-white">
-                            <Image src="/icons/check.png" alt="Proceed" width={10} height={10} />
-                            <span>Status: Proceed</span>
+                            <Image src="/icons/check.png" alt="Status" width={10} height={10} />
+                            <span>{getInsightStatusText(candidate.status)}</span>
                         </div>
                     </div>
                 </div>
@@ -132,20 +226,27 @@ function InsightTab({ candidate }) {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                        {strongSkills.map((skill, index) => {
-                            const skillClasses = [
-                                "bg-[#F0B8C1] text-[#A23949]",
-                                "bg-[#C6CEF7] text-[#2D468C]",
-                                "bg-[#E9DCA6] text-[#8E6D17]",
-                                "bg-[#D7C7C7] text-[#6E5353]",
-                            ];
+                        {strongSkills.length ? (
+                            strongSkills.map((skill, index) => {
+                                const skillClasses = [
+                                    "bg-[#F0B8C1] text-[#A23949]",
+                                    "bg-[#C6CEF7] text-[#2D468C]",
+                                    "bg-[#E9DCA6] text-[#8E6D17]",
+                                    "bg-[#D7C7C7] text-[#6E5353]",
+                                ];
 
-                            return (
-                                <SkillTag key={skill} className={skillClasses[index % skillClasses.length]}>
-                                    {skill}
-                                </SkillTag>
-                            );
-                        })}
+                                return (
+                                    <SkillTag
+                                        key={`${skill}-${index}`}
+                                        className={skillClasses[index % skillClasses.length]}
+                                    >
+                                        {skill}
+                                    </SkillTag>
+                                );
+                            })
+                        ) : (
+                            <span className="text-[12px] text-black/35">No skills yet</span>
+                        )}
                     </div>
                 </div>
 
@@ -156,11 +257,18 @@ function InsightTab({ candidate }) {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                        {missingSkills.map((skill) => (
-                            <SkillTag key={skill} className="bg-[#D7C7C7] text-[#6E5353]">
-                                {skill}
-                            </SkillTag>
-                        ))}
+                        {missingSkills.length ? (
+                            missingSkills.map((skill, index) => (
+                                <SkillTag
+                                    key={`${skill}-${index}`}
+                                    className="bg-[#D7C7C7] text-[#6E5353]"
+                                >
+                                    {skill}
+                                </SkillTag>
+                            ))
+                        ) : (
+                            <span className="text-[12px] text-black/35">No missing skills</span>
+                        )}
                     </div>
                 </div>
             </div>
@@ -172,7 +280,7 @@ function InsightTab({ candidate }) {
                             <Image src="/icons/suitcase.png" alt="Experience" width={12} height={12} />
                             <span>Experience</span>
                         </div>
-                        <p className="text-[14px] text-black/80">{candidate.experience}</p>
+                        <p className="text-[14px] text-black/80">{candidate.experience || "—"}</p>
                     </div>
 
                     <div>
@@ -180,7 +288,7 @@ function InsightTab({ candidate }) {
                             <Image src="/icons/lvl.png" alt="Level" width={12} height={12} />
                             <span>Level</span>
                         </div>
-                        <p className="text-[14px] text-black/80">{candidate.level || "Middle"}</p>
+                        <p className="text-[14px] text-black/80">{candidate.level || "—"}</p>
                     </div>
                 </div>
             </div>
@@ -191,22 +299,22 @@ function InsightTab({ candidate }) {
                 </p>
 
                 <div className="mb-2 flex items-center justify-between gap-2 text-[11px] text-black">
-                    <span>Technical match: {candidate.technicalMatch || 85}%</span>
-                    <span>Soft skills match: {candidate.softSkillsMatch || 95}%</span>
+                    <span>Technical match: {candidate.technicalMatch ?? 85}%</span>
+                    <span>Soft skills match: {candidate.softSkillsMatch ?? 95}%</span>
                 </div>
 
                 <div className="flex gap-3">
                     <div className="h-[8px] flex-1 rounded-full bg-[#DCEFE6]">
                         <div
                             className="h-[8px] rounded-full bg-[#19B97A]"
-                            style={{ width: `${candidate.technicalMatch || 85}%` }}
+                            style={{ width: `${candidate.technicalMatch ?? 85}%` }}
                         />
                     </div>
 
                     <div className="h-[8px] flex-1 rounded-full bg-[#DCEFE6]">
                         <div
                             className="h-[8px] rounded-full bg-[#19B97A]"
-                            style={{ width: `${candidate.softSkillsMatch || 95}%` }}
+                            style={{ width: `${candidate.softSkillsMatch ?? 95}%` }}
                         />
                     </div>
                 </div>
@@ -214,39 +322,16 @@ function InsightTab({ candidate }) {
 
             <div>
                 <p className="mb-2 text-[14px] font-semibold text-black">Summary</p>
-                <p className="text-[12px] leading-[1.35] text-black/70">{candidate.summary}</p>
-                <button type="button" className="mt-1 text-[12px] text-secondary">
-                    Show more
-                </button>
+                <p className="text-[12px] leading-[1.35] text-black/70">
+                    {candidate.summary || "No summary yet"}
+                </p>
             </div>
         </div>
     );
 }
 
 function TimelineTab({ candidate }) {
-    const timeline = candidate.timeline || [
-        {
-            id: "1",
-            title: "Move",
-            subtitle: "Moved to Screening",
-            date: "Jan 15, 2026",
-            color: "bg-[#22C55E]",
-        },
-        {
-            id: "2",
-            title: "AI Analysis",
-            subtitle: "95% match",
-            date: "Jan 15, 2026",
-            color: "bg-secondary",
-        },
-        {
-            id: "3",
-            title: "Create",
-            subtitle: "Candidate card created",
-            date: "Jan 12, 2026",
-            color: "bg-primary",
-        },
-    ];
+    const timeline = Array.isArray(candidate.timeline) ? candidate.timeline : [];
 
     return (
         <div className="px-[10px] pt-[14px]">
@@ -254,51 +339,55 @@ function TimelineTab({ candidate }) {
             <p className="mb-4 text-[12px] text-black/25">Candidate history</p>
 
             <div className="rounded-[12px] bg-[#F7F7F8] px-4 py-4">
-                <div className="relative">
-                    <div className="absolute left-[4px] top-[6px] bottom-[6px] w-[1px] bg-black/10" />
+                {timeline.length ? (
+                    <div className="relative">
+                        <div className="absolute left-[4px] top-[6px] bottom-[6px] w-[1px] bg-black/10" />
 
-                    <div className="space-y-5">
-                        {timeline.map((item) => (
-                            <div key={item.id} className="relative flex justify-between gap-3 pl-5">
+                        <div className="space-y-5">
+                            {timeline.map((item) => (
                                 <div
-                                    className={`absolute left-0 top-[4px] h-[8px] w-[8px] rounded-full ${item.color}`}
-                                />
+                                    key={item.id || `${item.title}-${item.date}`}
+                                    className="relative flex justify-between gap-3 pl-5"
+                                >
+                                    <div className="absolute left-0 top-[4px] h-[8px] w-[8px] rounded-full bg-primary" />
 
-                                <div className="min-w-0">
-                                    <p
-                                        className={`text-[14px] font-semibold ${
-                                            item.title === "AI Analysis"
-                                                ? "text-secondary"
-                                                : item.title === "Move"
-                                                    ? "text-[#22C55E]"
-                                                    : "text-primary"
-                                        }`}
-                                    >
-                                        {item.title}
-                                    </p>
-                                    <p className="text-[11px] text-black/60">{item.subtitle}</p>
+                                    <div className="min-w-0">
+                                        <p className="text-[14px] font-semibold text-primary">
+                                            {item.title || "Update"}
+                                        </p>
+                                        <p className="text-[11px] text-black/60">
+                                            {item.subtitle || item.description || "Candidate updated"}
+                                        </p>
+                                    </div>
+
+                                    <span className="shrink-0 text-[10px] text-black/35">
+                    {item.date || ""}
+                  </span>
                                 </div>
-
-                                <span className="shrink-0 text-[10px] text-black/35">{item.date}</span>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <p className="text-[12px] text-black/45">No activity yet</p>
+                )}
             </div>
         </div>
     );
 }
 
 function ProfileTab({ candidate }) {
-    const resumeFiles = candidate.resumeFiles || [
-        { id: "1", type: "pdf", fileName: "cv.pdf" },
-        { id: "2", type: "doc", fileName: "cv.docx" },
-    ];
+    console.log("cvUrl:", candidate.cvUrl);
+    console.log("resumeFiles:", candidate.resumeFiles);
+    console.log("full candidate:", candidate);
+
+    const resumeFiles = Array.isArray(candidate.resumeFiles) ? candidate.resumeFiles : [];
 
     return (
         <div className="px-[10px] pt-[14px]">
             <h3 className="text-[16px] font-semibold text-black">Profile</h3>
-            <p className="mb-4 text-[12px] text-black/25">Candidate information and documents</p>
+            <p className="mb-4 text-[12px] text-black/25">
+                Candidate information and documents
+            </p>
 
             <div className="mb-4 rounded-[12px] bg-[#F7F7F8] p-3">
                 <div className="mb-3 flex items-start gap-2">
@@ -321,28 +410,36 @@ function ProfileTab({ candidate }) {
 
                 <div className="space-y-2">
                     <InfoRow icon="/icons/mail.png" alt="Email">
-                        {candidate.email}
+                        {candidate.email || "No email"}
                     </InfoRow>
 
                     <InfoRow icon="/icons/telephone.png" alt="Phone">
-                        {candidate.phone || "+380366952447"}
+                        {candidate.phone || "No phone"}
                     </InfoRow>
 
-                    <InfoRow icon="/icons/in.png" alt="LinkedIn" isLink>
-                        {candidate.linkedIn || "LinkedIn"}
+                    <InfoRow
+                        icon="/icons/in.png"
+                        alt="LinkedIn"
+                        href={candidate.linkedIn || undefined}
+                    >
+                        {candidate.linkedIn || "No LinkedIn"}
                     </InfoRow>
                 </div>
 
                 <div className="mt-3 flex items-center justify-between gap-2 border-t border-black/10 pt-3">
                     <div className="flex items-center gap-2 text-[12px] text-black/70">
                         <span>Status:</span>
-                        <span className="rounded-full bg-[#B6E8C8] px-2 py-[2px] text-[12px] text-[#208F55]">
-              Screening
+                        <span
+                            className={`rounded-full px-2 py-[2px] text-[12px] ${getStatusChipClass(
+                                candidate.status
+                            )}`}
+                        >
+              {getStatusLabel(candidate.status)}
             </span>
                     </div>
 
                     <span className="text-[12px] font-semibold text-black">
-            {candidate.salaryFrom || "from 800$"}
+            {candidate.salaryFrom || "—"}
           </span>
                 </div>
             </div>
@@ -351,14 +448,19 @@ function ProfileTab({ candidate }) {
                 <p className="mb-3 text-[14px] font-semibold text-black">CV / Resume</p>
 
                 <div className="space-y-2">
-                    {resumeFiles.map((file) => (
-                        <ResumeRow
-                            key={file.id}
-                            icon={file.type === "pdf" ? "/icons/pdf.png" : "/icons/doc.png"}
-                            alt={file.type.toUpperCase()}
-                            fileName={file.fileName}
-                        />
-                    ))}
+                    {resumeFiles.length ? (
+                        resumeFiles.map((file) => (
+                            <ResumeRow
+                                key={file.id}
+                                icon={file.type === "pdf" ? "/icons/pdf.png" : "/icons/doc.png"}
+                                alt={file.type?.toUpperCase() || "FILE"}
+                                fileName={file.fileName}
+                                fileUrl={file.url}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-[12px] text-black/45">No resume uploaded</p>
+                    )}
                 </div>
             </div>
 
@@ -366,14 +468,7 @@ function ProfileTab({ candidate }) {
                 <p className="mb-3 text-[14px] font-semibold text-black">HR Notes</p>
 
                 <div className="rounded-[6px] border border-black/15 bg-white px-3 py-3 text-[12px] leading-[1.35] text-black/65">
-                    {candidate.hrNotes ||
-                        "Olga is a Middle Frontend Developer with 2+ years of experience and a strong 95% match for the vacancy."}
-                </div>
-
-                <div className="mt-2 text-right">
-                    <button type="button" className="text-[12px] text-[#7C3AED]">
-                        Edit
-                    </button>
+                    {candidate.hrNotes || "No notes yet"}
                 </div>
             </div>
         </div>

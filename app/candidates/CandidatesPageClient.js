@@ -47,7 +47,9 @@ export default function CandidatesPageClient() {
     const [viewMode, setViewMode] = useState("kanban");
     const [candidateToDelete, setCandidateToDelete] = useState(null);
     const [pendingCandidateIds, setPendingCandidateIds] = useState([]);
+
     const [isCandidateFormOpen, setIsCandidateFormOpen] = useState(false);
+    const [editingCandidate, setEditingCandidate] = useState(null);
 
     const [searchInput, setSearchInput] = useState(currentSearchParam);
     const [debouncedSearch, setDebouncedSearch] = useState(currentSearchParam);
@@ -289,11 +291,18 @@ export default function CandidatesPageClient() {
     };
 
     const handleOpenCandidateForm = () => {
+        setEditingCandidate(null);
+        setIsCandidateFormOpen(true);
+    };
+
+    const handleEditCandidate = (candidate) => {
+        setEditingCandidate(candidate);
         setIsCandidateFormOpen(true);
     };
 
     const handleCloseCandidateForm = async (shouldRefresh = false) => {
         setIsCandidateFormOpen(false);
+        setEditingCandidate(null);
 
         if (shouldRefresh) {
             await loadCandidates();
@@ -326,6 +335,7 @@ export default function CandidatesPageClient() {
                                 selectedCandidateId={selectedCandidateId}
                                 onSelectCandidate={handleSelectCandidate}
                                 onDeleteCandidate={handleAskDeleteCandidate}
+                                onEditCandidate={handleEditCandidate}
                                 onMoveCandidate={handleMoveCandidate}
                                 onAddCandidate={handleOpenCandidateForm}
                                 pendingCandidateIds={pendingCandidateIds}
@@ -360,7 +370,12 @@ export default function CandidatesPageClient() {
             />
 
             {isCandidateFormOpen ? (
-                <CandidateForm onClose={handleCloseCandidateForm} />
+                <CandidateForm
+                    isEditing={Boolean(editingCandidate)}
+                    candidateId={editingCandidate?.id || null}
+                    initialData={editingCandidate?.raw || null}
+                    onClose={handleCloseCandidateForm}
+                />
             ) : null}
         </div>
     );
