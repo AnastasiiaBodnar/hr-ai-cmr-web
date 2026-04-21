@@ -21,7 +21,7 @@ export default function Select({ options, value, onChange, name, placeholder = '
     return (
         <div className={`relative w-full ${className}`} ref={containerRef}>
             <div
-                className={`w-full px-4 py-2.5 border-[0.8px] rounded-lg text-sm bg-[#F8FAFC] cursor-pointer flex items-center justify-between transition-colors ${isOpen ? 'border-teal-500 ring-1 ring-teal-500' : 'border-[#B0B0B0] hover:border-gray-400'
+                className={`w-full px-4 h-[34px] border-[0.8px] rounded-lg text-[14px] font-normal font-roboto bg-[#F8FAFC] cursor-pointer flex items-center justify-between transition-colors ${isOpen ? 'border-accent ring-1 ring-accent/20' : 'border-[#B0B0B0] hover:border-gray-400'
                     }`}
                 onClick={() => setIsOpen(!isOpen)}
             >
@@ -45,9 +45,9 @@ export default function Select({ options, value, onChange, name, placeholder = '
                         return (
                             <div
                                 key={option.value}
-                                className={`px-4 py-1.5 text-[12px] cursor-pointer transition-colors flex items-center justify-between ${isSelected
-                                        ? 'bg-[#0B8B9538] text-accent font-normal'
-                                        : 'text-[#898989] hover:bg-gray-50 hover:text-accent'
+                                className={`px-4 h-[28px] text-[14px] font-normal font-roboto cursor-pointer transition-colors flex items-center ${isSelected
+                                        ? 'bg-[#0B8B952E] text-accent'
+                                        : 'text-[#898989] hover:bg-gray-50'
                                     }`}
                                 onClick={() => {
                                     onChange({ target: { name, value: option.value } })
