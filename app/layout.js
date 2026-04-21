@@ -1,27 +1,28 @@
-import { Inter, Roboto } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const roboto = Roboto({
-    variable: "--font-roboto",
-    subsets: ["latin"],
-    weight: ["400", "500", "700"],
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
-const inter = Inter({
-    variable: "--font-inter",
-    subsets: ["latin"],
-    weight: ["400"],
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata = {
-    title: "HR CRM",
-    description: "AI-driven HR management system",
+  title: "HR CRM",
+  description: "AI-driven HR management system",
 };
 
 export default function RootLayout({ children }) {
-    return (
-        <html lang="en" className={`${roboto.variable} ${inter.variable}`}>
-        <body>{children}</body>
-        </html>
-    );
+  return (
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col">{children}</body>
+    </html>
+  );
 }

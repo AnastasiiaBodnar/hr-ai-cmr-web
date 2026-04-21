@@ -85,7 +85,7 @@ const PeriodDropdown = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`px-5 h-10 bg-gray-50 border rounded-[10px] text-sm font-medium flex items-center gap-4 transition-all ${isOpen ? 'border-primary text-primary shadow-[0_0_0_1px_#0B8B95]' : 'border-gray-100 text-gray-600'
+        className={`px-5 h-10 bg-[#F8FAFC] border rounded-[10px] text-[14px] font-normal font-roboto flex items-center justify-between gap-4 transition-all ${isOpen ? 'border-primary text-primary' : 'border-[#B0B0B0] text-[#898989]'
           }`}
       >
         {selectedPeriod}
@@ -112,9 +112,9 @@ const PeriodDropdown = () => {
                 setSelectedPeriod(period);
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${selectedPeriod === period
-                ? 'bg-primary/10 text-primary font-bold'
-                : 'text-gray-400 hover:bg-gray-50'
+              className={`w-full text-left px-4 text-[14px] font-normal font-roboto transition-colors h-[28px] flex items-center ${selectedPeriod === period
+                ? 'bg-[#0022932E] text-primary'
+                : 'text-[#898989] hover:bg-gray-50'
                 }`}
             >
               {period}
@@ -135,7 +135,6 @@ const Overview = ({ onCreateVacancy }) => {
         <h2 className="text-xl font-bold text-gray-900 self-start sm:self-auto">Overview</h2>
 
         <div className="flex flex-col min-[500px]:flex-row items-stretch min-[500px]:items-center gap-3 w-full sm:w-auto">
-          <PeriodDropdown />
 
           <button
             onClick={onCreateVacancy}
