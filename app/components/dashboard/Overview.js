@@ -135,7 +135,6 @@ const Overview = ({ onCreateVacancy }) => {
         <h2 className="text-xl font-bold text-gray-900 self-start sm:self-auto">Overview</h2>
 
         <div className="flex flex-col min-[500px]:flex-row items-stretch min-[500px]:items-center gap-3 w-full sm:w-auto">
-          <PeriodDropdown />
 
           <button
             onClick={onCreateVacancy}
