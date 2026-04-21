@@ -9,10 +9,9 @@
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #E11D48;
-  --font-roboto: var(--font-roboto);
 }
 
 body {
   background: var(--color-background);
-  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }

@@ -1,0 +1,330 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import {
+    DndContext,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    closestCorners,
+} from "@dnd-kit/core";
+import CandidateColumn from "./CandidateColumn";
+import CandidatesListView from "./CandidatesListView";
+import FilterDropdown from "@/app/components/ui/FilterDropdown";
+import { CANDIDATE_STATUSES } from "@/lib/constants/candidate-statuses";
+
+const PRIMARY_COLUMNS = ["NEW", "SCREENING", "INTERVIEW_TEST", "OFFER"];
+const STACKED_COLUMNS = ["HIRED", "REJECTED"];
+
+export default function CandidatesBoard({
+                                            candidates,
+                                            selectedCandidateId,
+                                            onSelectCandidate,
+                                            onDeleteCandidate,
+                                            onEditCandidate,
+                                            onMoveCandidate,
+                                            onAddCandidate,
+                                            pendingCandidateIds,
+                                            isPanelOpen,
+                                            viewMode,
+                                            onChangeViewMode,
+                                            isSearchActive,
+                                            selectedStatuses,
+                                            selectedPosition,
+                                            onStatusChange,
+                                            onPositionChange,
+                                            onResetFilters,
+                                            positionOptions,
+                                        }) {
+    const [windowWidth, setWindowWidth] = useState(0);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+
+        const updateWidth = () => setWindowWidth(window.innerWidth);
+        updateWidth();
+        window.addEventListener("resize", updateWidth);
+
+        return () => window.removeEventListener("resize", updateWidth);
+    }, []);
+
+    const desktopGridBreakpoint = isPanelOpen ? 1660 : 1420;
+    const shouldUseDesktopGrid = windowWidth >= desktopGridBreakpoint;
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8,
+            },
+        })
+    );
+
+    const handleDragEnd = async (event) => {
+        const { active, over } = event;
+
+        if (!active || !over) return;
+
+        const candidateId = String(active.id);
+        const targetColumnKey = String(over.id);
+
+        await onMoveCandidate({ candidateId, targetColumnKey });
+    };
+
+    const getCandidatesByStatus = (statusKey) => {
+        if (statusKey === "INTERVIEW_TEST") {
+            return candidates.filter(
+                (candidate) =>
+                    candidate.status === "INTERVIEW" || candidate.status === "TEST_TASK"
+            );
+        }
+
+        return candidates.filter((candidate) => candidate.status === statusKey);
+    };
+
+    const getStatusMeta = (statusKey) =>
+        CANDIDATE_STATUSES.find((status) => status.key === statusKey);
+
+    const finalResultsWidth = !shouldUseDesktopGrid
+        ? isPanelOpen
+            ? "w-[245px]"
+            : "w-[265px]"
+        : isPanelOpen
+            ? "w-[280px]"
+            : "w-[300px]";
+
+    return (
+        <main className="flex min-h-0 flex-1 flex-col bg-background px-4 py-4 xl:px-5 xl:py-5 2xl:px-6">
+            <div className="mb-4 flex items-end gap-4">
+                <h1 className="text-[32px] font-bold leading-none text-black">
+                    AI CRM Candidates
+                </h1>
+                <span className="text-[30px] leading-none text-black">|</span>
+                <h2 className="text-[24px] font-semibold leading-none text-black">
+                    Recruitment panel
+                </h2>
+            </div>
+
+            <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <span className="text-[16px] font-normal text-black">Filter by</span>
+
+                    <FilterDropdown
+                        placeholder="Position"
+                        options={positionOptions}
+                        value={selectedPosition}
+                        onChange={onPositionChange}
+                    />
+
+                    <FilterDropdown
+                        placeholder="Status"
+                        options={[
+                            { label: "New", value: "NEW" },
+                            { label: "Screening", value: "SCREENING" },
+                            { label: "Interview/Test", value: "INTERVIEW_TEST" },
+                            { label: "Offer", value: "OFFER" },
+                            { label: "Hired", value: "HIRED" },
+                            { label: "Rejected", value: "REJECTED" },
+                        ]}
+                        value={selectedStatuses}
+                        onChange={onStatusChange}
+                        multi
+                    />
+
+                    <button
+                        type="button"
+                        onClick={onResetFilters}
+                        className="h-[38px] rounded-[6px] border border-black/15 bg-white px-4 text-[14px] text-black/55"
+                    >
+                        Скинути фільтри
+                    </button>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <button
+                        type="button"
+                        onClick={onAddCandidate}
+                        className="h-[28px] rounded-[4px] bg-primary px-4 text-[13px] font-normal text-white"
+                    >
+                        Add candidates +
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => onChangeViewMode("list")}
+                        className={`flex h-[24px] w-[24px] items-center justify-center rounded-[4px] ${
+                            viewMode === "list" ? "bg-primary/10" : ""
+                        }`}
+                    >
+                        <Image src="/icons/list.png" alt="List view" width={16} height={16} />
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => onChangeViewMode("kanban")}
+                        className={`flex h-[24px] w-[24px] items-center justify-center rounded-[4px] ${
+                            viewMode === "kanban" ? "bg-primary/10" : ""
+                        }`}
+                    >
+                        <Image
+                            src="/icons/kanban.png"
+                            alt="Kanban view"
+                            width={16}
+                            height={16}
+                        />
+                    </button>
+                </div>
+            </div>
+
+            <div className="min-h-0 flex-1">
+                {isSearchActive && candidates.length === 0 ? (
+                    <div className="flex h-full items-center justify-center rounded-[16px] bg-[#EAEAEAA3] text-[18px] font-medium text-black/45">
+                        Нічого не знайдено
+                    </div>
+                ) : viewMode === "list" ? (
+                    <CandidatesListView
+                        candidates={candidates}
+                        onSelectCandidate={onSelectCandidate}
+                        onDeleteCandidate={onDeleteCandidate}
+                        onEditCandidate={onEditCandidate}
+                    />
+                ) : !isMounted ? (
+                    <div className="flex h-full items-center justify-center rounded-[16px] bg-[#EAEAEAA3] text-black/40">
+                        Loading board...
+                    </div>
+                ) : (
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCorners}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <div className="h-full rounded-[16px] bg-[#EAEAEAA3] p-[8px] xl:p-[10px]">
+                            {!shouldUseDesktopGrid ? (
+                                <div className="h-full overflow-x-auto overflow-y-hidden">
+                                    <div
+                                        className={`flex h-full gap-[10px] ${
+                                            isPanelOpen ? "min-w-[1060px]" : "min-w-[1160px]"
+                                        }`}
+                                    >
+                                        {PRIMARY_COLUMNS.map((statusKey) => {
+                                            const status = getStatusMeta(statusKey);
+                                            const items = getCandidatesByStatus(statusKey);
+
+                                            return (
+                                                <CandidateColumn
+                                                    key={status.key}
+                                                    columnKey={status.key}
+                                                    title={status.label}
+                                                    count={items.length}
+                                                    headerClassName={status.headerClassName}
+                                                    candidates={items}
+                                                    selectedCandidateId={selectedCandidateId}
+                                                    onSelectCandidate={onSelectCandidate}
+                                                    compactMode={isPanelOpen}
+                                                    pendingCandidateIds={pendingCandidateIds}
+                                                />
+                                            );
+                                        })}
+
+                                        <div
+                                            className={`${finalResultsWidth} flex shrink-0 flex-col gap-[10px]`}
+                                        >
+                                            <div className="rounded-[14px] bg-white px-4 py-4">
+                                                <h3 className="truncate text-[22px] font-semibold leading-none text-black">
+                                                    Final Results
+                                                </h3>
+                                            </div>
+
+                                            {STACKED_COLUMNS.map((statusKey) => {
+                                                const status = getStatusMeta(statusKey);
+                                                const items = getCandidatesByStatus(statusKey);
+
+                                                return (
+                                                    <CandidateColumn
+                                                        key={status.key}
+                                                        columnKey={status.key}
+                                                        title={status.label}
+                                                        count={items.length}
+                                                        headerClassName={status.headerClassName}
+                                                        candidates={items}
+                                                        selectedCandidateId={selectedCandidateId}
+                                                        onSelectCandidate={onSelectCandidate}
+                                                        compact
+                                                        wide
+                                                        compactMode={isPanelOpen}
+                                                        pendingCandidateIds={pendingCandidateIds}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div
+                                    className={`grid h-full gap-[12px] ${
+                                        isPanelOpen
+                                            ? "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)_280px]"
+                                            : "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)_300px]"
+                                    }`}
+                                >
+                                    {PRIMARY_COLUMNS.map((statusKey) => {
+                                        const status = getStatusMeta(statusKey);
+                                        const items = getCandidatesByStatus(statusKey);
+
+                                        return (
+                                            <CandidateColumn
+                                                key={status.key}
+                                                columnKey={status.key}
+                                                title={status.label}
+                                                count={items.length}
+                                                headerClassName={status.headerClassName}
+                                                candidates={items}
+                                                selectedCandidateId={selectedCandidateId}
+                                                onSelectCandidate={onSelectCandidate}
+                                                fluid
+                                                compactMode={isPanelOpen}
+                                                pendingCandidateIds={pendingCandidateIds}
+                                            />
+                                        );
+                                    })}
+
+                                    <div className="flex min-h-0 flex-col gap-[12px]">
+                                        <div className="rounded-[14px] bg-white px-4 py-4">
+                                            <h3 className="truncate text-[22px] font-semibold leading-none text-black">
+                                                Final Results
+                                            </h3>
+                                        </div>
+
+                                        {STACKED_COLUMNS.map((statusKey) => {
+                                            const status = getStatusMeta(statusKey);
+                                            const items = getCandidatesByStatus(statusKey);
+
+                                            return (
+                                                <CandidateColumn
+                                                    key={status.key}
+                                                    columnKey={status.key}
+                                                    title={status.label}
+                                                    count={items.length}
+                                                    headerClassName={status.headerClassName}
+                                                    candidates={items}
+                                                    selectedCandidateId={selectedCandidateId}
+                                                    onSelectCandidate={onSelectCandidate}
+                                                    compact
+                                                    wide
+                                                    fluid
+                                                    compactMode={isPanelOpen}
+                                                    pendingCandidateIds={pendingCandidateIds}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </DndContext>
+                )}
+            </div>
+        </main>
+    );
+}
